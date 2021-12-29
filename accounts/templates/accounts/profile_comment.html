@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% load product_tags %}
+
+{% block title %}نقد و نظرات{% endblock %}
+
+{% block content %}
+
+<div class="wrapper">
+    <!-- Start main-content -->
+    <main class="main-content dt-sl mb-3">
+        <div class="container main-container">
+            <div class="row">
+                <!-- Start Sidebar -->
+                {% include 'accounts/slider.html' %}
+                <!-- End Sidebar -->
+                <!-- Start Content -->
+                <div class="col-xl-9 col-lg-8 col-md-8 col-sm-12">
+                    <div class="row">
+                        <div class="col-12">
+                            <div
+                                    class="section-title text-sm-title title-wide mb-1 no-after-title-wide dt-sl mb-2 px-res-1">
+                                <h2>نقد و نظرات</h2>
+                            </div>
+                            <div class="dt-sl">
+                                <div class="row">
+                                    {% for comment in object_list %}
+                                    <div class="col-lg-6 col-md-12">
+                                        <div class="card-horizontal-product border-bottom rounded-0">
+                                            <div class="card-horizontal-product-thumb">
+                                                <a href="{{ comment.product.get_absolute_url }}">
+                                                    <img src="{{ comment.product.get_image.image.url }}" alt="">
+                                                </a>
+                                                <small class="font-weight-bold">امتیاز من به محصول</small>
+                                                {% if comment.get_total_rate %}
+                                                <div class="rating-stars">
+                                                    {% for _ in comment.get_total_rate|times %}
+                                                    <i class="mdi mdi-star active"></i>
+                                                    {% endfor %}
+                                                </div>
+                                                {% endif %}
+                                            </div>
+                                            <div class="card-horizontal-product-content">
+                                                {% if comment.is_active %}
+                                                <div class="label-status-comment">تایید شده</div>
+                                                {% else %}
+                                                <div class="label-status-comment text-danger">تایید نشده</div>
+                                                {% endif %}
+                                                <div class="card-horizontal-comment-title">
+                                                    <a href="#">
+                                                        <h3>{{ comment.subject }}</h3>
+                                                    </a>
+                                                </div>
+                                                <div class="card-horizontal-comment">
+                                                    <p>{{ comment.body }}</p>
+                                                </div>
+                                                <div class="card-horizontal-product-buttons">
+                                                    <div class="float-right">
+                                                            <span class="count-like">
+                                                                <i class="mdi mdi-thumb-up-outline"></i>11
+                                                            </span>
+                                                        <span class="count-like">
+                                                                <i class="mdi mdi-thumb-down-outline"></i>2
+                                                            </span>
+                                                    </div>
+                                                    <a href="{% url 'accounts:comment_delete' comment.id %}" class="btn btn-light">حذف</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% empty %}
+                                    <p class="alert alert-warning">شما نقد و نظری ثبت نکرده اید</p>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- End Content -->
+            </div>
+            <!-- Start Product-Slider -->
+            <!-- End Product-Slider -->
+        </div>
+    </main>
+    <!-- End main-content -->
+</div>
+
+{% endblock %}

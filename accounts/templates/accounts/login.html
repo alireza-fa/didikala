@@ -1,0 +1,97 @@
+{% extends 'accounts/base_login_and_register.html' %}
+
+{% load static %}
+
+{% block title %}ورود{% endblock %}
+
+{% block content %}
+<div class="wrapper">
+    <!-- Start main-content -->
+    <main class="main-content dt-sl mt-4 mb-3">
+        <div class="container main-container">
+            <div class="row">
+                <div class="col-xl-4 col-lg-5 col-md-7 col-12 mx-auto">
+                    <div class="logo-area text-center mb-3">
+                        <a href="{% url 'main:home' %}"><img src="{% static 'img/logo.png' %}" class="img-fluid" alt="logo"></a>
+                    </div>
+                    <div class="auth-wrapper form-ui border pt-4">
+                        <div class="section-title title-wide mb-1 no-after-title-wide">
+                            <h2 class="font-weight-bold">ورود</h2>
+                        </div>
+                        <form action="#" method="post" novalidate>
+                            {% csrf_token %}
+                            <div class="form-row-title">
+                                <h3>ایمیل یا نام کاربری</h3>
+                            </div>
+                            <div class="form-row with-icon">
+                                {{ form.username }}
+                                <i class="mdi mdi-account-circle-outline"></i>
+                            </div>
+                            <a class="text-danger">{{ form.username.errors }}</a>
+                            <div class="form-row-title">
+                                <h3>رمز عبور</h3>
+                            </div>
+                            <div class="form-row with-icon">
+                                {{ form.password }}
+                                <i class="mdi mdi-lock-open-variant-outline"></i>
+                            </div>
+                            <a class="text-danger">{{ form.password.errors }}</a>
+                            <div class="form-row mt-2">
+                                <div class="custom-control custom-checkbox float-right mt-2">
+                                    {{ form.remember_me }}
+                                    <label class="custom-control-label" for="{{ form.remember_me.id_for_label }}">
+                                        مرا به خاطر بسپار
+                                    </label>
+                                </div>
+                            </div>
+                            <br>
+                            <a href="{% url 'accounts:reset_pass' %}" class="text-danger">😦😐رمز عبورم رو فراموش کردم</a>
+
+                            <div class="form-row mt-3">
+                                <button class="btn-primary-cm btn-with-icon mx-auto w-100" type="submit">
+                                    <i class="mdi mdi-login-variant"></i>
+                                    ورود به دیدیکالا
+                                </button>
+                            </div>
+                        </form>
+                        <div class="form-footer mt-3">
+                            <div>
+                                <span class="font-weight-bold">کاربر جدید هستید؟</span>
+                                <a href="{% url 'accounts:register' %}" class="mr-3 mt-2">ثبت نام در دیدیکالا</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <!-- End main-content -->
+    <!-- Start mini-footer -->
+    <footer class="mini-footer dt-sl">
+        <div class="container main-container">
+            <div class="row">
+                <div class="col-12">
+                    <ul class="mini-footer-menu">
+                        <li><a href="#">درباره دیدیکالا</a></li>
+                        <li><a href="#">فرصت های شغلی</a></li>
+                        <li><a href="#">تماس با ما</a></li>
+                        <li><a href="#">همکاری با سازمان ها</a></li>
+                    </ul>
+                </div>
+                <div class="col-12 mt-2 mb-3">
+                    <div class="footer-light-text">
+                        استفاده از مطالب فروشگاه اینترنتی دیدیکالا فقط برای مقاصد غیرتجاری و با ذکر منبع بلامانع
+                        است. کلیه حقوق این سایت متعلق به (فروشگاه آنلاین دیدیکالا) می‌باشد.
+                    </div>
+                </div>
+                <div class="col-12 text-center">
+                    <div class="copy-right-mini-footer">
+                        Copyright © 2019 Didikala
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- End mini-footer -->
+</div>
+{% endblock %}

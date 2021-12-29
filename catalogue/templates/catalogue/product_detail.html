@@ -1,0 +1,463 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% load product_tags %}
+
+{% block title %}{{ object.title }}{% endblock %}
+
+{% block js_files %}
+<script src="{% static 'js/favorite.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+
+<div class="wrapper">
+    <!-- Start main-content -->
+    <main class="main-content dt-sl mb-3">
+        <div class="container main-container">
+            <!-- Start title - breadcrumb -->
+            <div class="title-breadcrumb-special dt-sl mb-3">
+                <div class="breadcrumb dt-sl">
+                    <nav>
+                        <a href="{% url 'main:home' %}">دیجی کالا</a>
+                        <a href="{{ product.product_type.get_absolute_url }}">{{ object.product_type }}</a>
+                        {% for category in object.category.all %}
+                        <a href="{{ category.get_absolute_url }}">{{ category.name }}</a>
+                        {% endfor %}
+                    </nav>
+                </div>
+            </div>
+            <!-- End title - breadcrumb -->
+            <!-- Start Product -->
+            <div class="dt-sn mb-5 dt-sl">
+                <div class="row">
+                    <!-- Product Gallery-->
+                    <div class="col-lg-4 col-md-6 ps-relative">
+                        <!-- Product Options-->
+                        {% if request.user.is_authenticated %}
+                        <ul class="gallery-options">
+                            <li>
+                                {% if favorite %}
+                                <button id="favorite_button" class="add-favorites favorites" data-product="{{ product.id }}"><i class="mdi mdi-heart"></i></button>
+                                <span class="tooltip-option">افزودن به علاقمندی</span>
+                                {% else %}
+                                <button id="favorite_button" class="add-favorites" data-product="{{ product.id }}"><i class="mdi mdi-heart"></i></button>
+                                <span class="tooltip-option">افزودن به علاقمندی</span>
+                                {% endif %}
+                            </li>
+                        </ul>
+                        {% endif %}
+                        {% if object.special_sale %}
+                        <div class="product-timeout position-relative pt-5 mb-3">
+                            <div class="promotion-badge">
+                                فروش ویژه
+                            </div>
+                            <div class="countdown-timer" countdown data-date="10 24 2019 20:20:22">
+                                <span data-days>0</span>:
+                                <span data-hours>0</span>:
+                                <span data-minutes>0</span>:
+                                <span data-seconds>0</span>
+                            </div>
+                        </div>
+                        {% endif %}
+                        <div class="product-gallery">
+                            <span class="badge">پر فروش</span>
+                            <div class="product-carousel owl-carousel" data-slider-id="1">
+                                {% for image in object.get_images %}
+                                <div class="item">
+                                    <a class="gallery-item" href="{{ image.image.url }}"
+                                       data-fancybox="gallery1">
+                                        <img src="{{ image.image.url }}" alt="Product">
+                                    </a>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            <div class="d-flex justify-content-center flex-wrap">
+                                <ul class="product-thumbnails owl-thumbs ml-2" data-slider-id="1">
+                                    <li class="owl-thumb-item active">
+                                        <a href="">
+                                            <img src="{{ object.get_image.image.url }}" alt="Product">
+                                        </a>
+                                    </li>
+                                    {% for image in object.get_image_slide %}
+                                    <li class="owl-thumb-item">
+                                        <a href="">
+                                            <img src="{{ image.image.url }}" alt="Product">
+                                        </a>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Product Info -->
+                    <div class="col-lg-8 col-md-6 py-2">
+                        <div class="product-info dt-sl">
+                            <div class="product-title dt-sl">
+                                <h1>{{ object.title }}
+                                </h1>
+                            </div>
+                            {% if object.colors.all %}
+                            <div class="product-variant dt-sl">
+                                <div class="section-title text-sm-title title-wide no-after-title-wide mb-0">
+                                    <h2>انتخاب رنگ:</h2>
+                                </div>
+                                <ul class="product-variants float-right ml-3">
+                                    {% for color in object.colors.all %}
+                                    <li class="ui-variant">
+                                        <label class="ui-variant ui-variant--color">
+                                            <span class="ui-variant-shape" style="background-color: {{ color.color }}"></span>
+                                            <input type="radio" value="1" name="color" class="variant-selector"
+                                                   checked>
+                                            <span class="ui-variant--check">{{ color.get_color_display }}</span>
+                                        </label>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                            </div>
+                            <div class="product-params dt-sl">
+                                <ul data-title="ویژگی‌های محصول">
+                                    {% for attribute in object.get_attributes %}
+                                    <li>
+                                        <span>{{ attribute.title }}: </span>
+                                        <span> {{ attribute.value }} </span>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                                <div class="sum-more">
+                                        <span class="show-more btn-link-border">
+                                            + موارد بیشتر
+                                        </span>
+                                    <span class="show-less btn-link-border">
+                                            - بستن
+                                        </span>
+                                </div>
+                            </div>
+                            <div class="section-title text-sm-title title-wide no-after-title-wide mb-0 dt-sl">
+                                <h2>کد محصول:{{ object.upc }}</h2>
+                            </div>
+                            <div class="section-title text-sm-title title-wide no-after-title-wide mb-0 dt-sl">
+                                <h2>قیمت : <span class="price">{{ object.get_stock.price }} تومان</span></h2>
+                            </div>
+                            <div class="dt-sl mt-4">
+                                <a href="{% url 'cart:add_cart' object.id %}" class="btn-primary-cm btn-with-icon">
+                                    <img src="{% static 'img/theme/shopping-cart.png' %}" alt="">
+                                    افزودن به سبد خرید
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-add-to-cart-btn-wrapper">
+                    <a href="#" class="mb-add-to-cart-btn">افزودن به سبد خرید</a>
+                </div>
+            </div>
+            <div class="dt-sn mb-5 px-0 dt-sl pt-0">
+                <!-- Start tabs -->
+                <section class="tabs-product-info mb-3 dt-sl">
+                    <div class="ah-tab-wrapper border-bottom dt-sl">
+                        <div class="ah-tab dt-sl">
+                            <a class="ah-tab-item" data-ah-tab-active="true" href=""><i
+                                    class="mdi mdi-glasses"></i>نقد و بررسی</a>
+                            <a class="ah-tab-item" href=""><i class="mdi mdi-format-list-checks"></i>مشخصات</a>
+                            <a class="ah-tab-item" href=""><i
+                                    class="mdi mdi-comment-text-multiple-outline"></i>نظرات کاربران</a>
+                            <a class="ah-tab-item" href=""><i class="mdi mdi-comment-question-outline"></i>پرسش و
+                                پاسخ</a>
+                        </div>
+                    </div>
+                    <div class="ah-tab-content-wrapper product-info px-4 dt-sl">
+                        <div class="ah-tab-content dt-sl" data-ah-tab-active="true">
+                            <div class="section-title text-sm-title title-wide no-after-title-wide mb-0 dt-sl">
+                                <h2>نقد و بررسی</h2>
+                            </div>
+                            <div class="product-title dt-sl">
+                                <h1>{{ object.title }}
+                                </h1>
+                            </div>
+                            <div class="description-product dt-sl mt-3 mb-3">
+                                <div class="container">
+                                    <p>{{ object.description }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ah-tab-content params dt-sl">
+                            <div class="section-title text-sm-title title-wide no-after-title-wide mb-0 dt-sl">
+                                <h2>مشخصات فنی</h2>
+                            </div>
+                            <div class="product-title dt-sl mb-3">
+                                <h1>گوشی موبایل سامسونگ مدل Galaxy A50 SM-A505F/DS دو سیم کارت ظرفیت 128گیگابایت
+                                </h1>
+                                <h3>Samsung Galaxy A50 SM-A505F/DS Dual SIM 128GB Mobile Phone</h3>
+                            </div>
+                            <section>
+                                <h3 class="params-title">مشخصات کلی</h3>
+                                <ul class="params-list">
+
+                                    {% for attribute in object.attributes.all %}
+                                    <li>
+                                        <div class="params-list-key">
+                                            <span class="d-block">{{ attribute.title }}</span>
+                                        </div>
+                                        <div class="params-list-value">
+                                                <span class="d-block">
+                                                    {{ attribute.value }}
+                                                </span>
+                                        </div>
+                                    </li>
+                                    {% endfor %}
+
+                                </ul>
+                            </section>
+                        </div>
+                        <div class="ah-tab-content comments-tab dt-sl">
+                            <div class="section-title title-wide no-after-title-wide mb-0 dt-sl">
+                                <h2>امتیاز کاربران به:</h2>
+                            </div>
+                            <div class="product-title dt-sl mb-3">
+                                <h1>{{ product.title }}
+                                </h1>
+                            </div>
+                            <div class="dt-sl">
+                                <div class="row">
+                                    <div class="col-md-6 col-sm-12">
+                                        <ul class="content-expert-rating">
+                                            <li>
+                                                <div class="cell">طراحی</div>
+                                                <div class="cell">
+                                                    <div class="rating rating--general" data-rate-digit="{{ product.get_designing.info }}">
+                                                        <div class="rating-rate" data-rate-value="100%"
+                                                             style="width: {{ product.get_designing.percent }}%;"></div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="cell">ارزش خرید</div>
+                                                <div class="cell">
+                                                    <div class="rating rating--general" data-rate-digit="{{ product.get_cost.info }}">
+                                                        <div class="rating-rate" data-rate-value="100%"
+                                                             style="width: {{ product.get_cost.percent }}%;"></div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="cell">کیفیت ساخت</div>
+                                                <div class="cell">
+                                                    <div class="rating rating--general" data-rate-digit="{{ product.get_quality.info }}">
+                                                        <div class="rating-rate" data-rate-value="100%"
+                                                             style="width: {{ product.get_quality.percent }}%;"></div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="cell">نوآوری</div>
+                                                <div class="cell">
+                                                    <div class="rating rating--general" data-rate-digit="{{ product.get_innovation.info }}">
+                                                        <div class="rating-rate" data-rate-value="100%"
+                                                             style="width: {{ product.get_innovation.percent }}%;"></div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="cell">امکانات</div>
+                                                <div class="cell">
+                                                    <div class="rating rating--general" data-rate-digit="{{ product.get_features.info }}">
+                                                        <div class="rating-rate" data-rate-value="100%"
+                                                             style="width: {{ product.get_features.percent }}%;"></div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="cell">راحتی در استفاده</div>
+                                                <div class="cell">
+                                                    <div class="rating rating--general" data-rate-digit="{{ product.get_easiness.info }}">
+                                                        <div class="rating-rate" data-rate-value="100%"
+                                                             style="width: {{ product.get_easiness.percent }}%;"></div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-6 col-sm-12">
+                                        <div class="comments-summary-note">
+                                                <span>شما هم می‌توانید در مورد این کالا نظر
+                                                    بدهید.</span>
+                                            <p>برای ثبت نظر، لازم است ابتدا وارد حساب کاربری خود
+                                                شوید. اگر این محصول را قبلا از دیجی‌کالا خریده
+                                                باشید، نظر
+                                                شما به عنوان مالک محصول ثبت خواهد شد.
+                                            </p>
+                                            <div class="dt-sl mt-2">
+                                                <a href="{% url 'comment:comment_add' product.id %}" class="btn-primary-cm btn-with-icon">
+                                                    <i class="mdi mdi-comment-text-outline"></i>
+                                                    افزودن نظر جدید
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="comments-area dt-sl">
+                                    <div
+                                            class="section-title text-sm-title title-wide no-after-title-wide mb-0 dt-sl">
+                                        <h2>نظرات کاربران</h2>
+                                        <p class="count-comment">{{ product.product_comments.count }} نظر</p>
+                                    </div>
+                                    <ol class="comment-list">
+                                        {% for comment in product.product_comments %}
+                                        <li>
+                                            <div class="comment-body">
+                                                <div class="row">
+                                                    <div class="col-md-3 col-sm-12">
+                                                        <ul class="comments-user-shopping">
+                                                            <li>
+                                                            </li>
+                                                        </ul>
+                                                        <div class="message-light message-light--opinion-positive">
+                                                            خرید این محصول را ({{ comment.get_suggest_display }})
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-9 col-sm-12 comment-content">
+                                                        <div class="comment-title">
+                                                            {{ comment.subject }}
+                                                        </div>
+                                                        <div class="comment-author">
+                                                            توسط {{ comment.user.username }} در تاریخ {{ comment.created|date }}
+                                                        </div>
+                                                        <div class="row">
+                                                            {% if comment.positive_point %}
+                                                            <div class="col-md-4 col-sm-6 col-12">
+                                                                <div class="content-expert-evaluation-positive">
+                                                                    <span>نقاط قوت</span>
+                                                                    <ul>
+                                                                        <li>{{ comment.positive_point }}
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                            {% endif %}
+                                                            {% if comment.negative_point %}
+                                                            <div class="col-md-4 col-sm-6 col-12">
+                                                                <div class="content-expert-evaluation-negative">
+                                                                    <span>نقاط ضعف</span>
+                                                                    <ul>
+                                                                        <li>{{ product.negative_point }}</li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                            {% endif %}
+                                                        </div>
+                                                        <p>
+                                                            {{ comment.body }}
+                                                        </p>
+
+                                                        <div class="footer">
+                                                            <div class="comments-likes">
+                                                                آیا این نظر برایتان مفید بود؟
+                                                                <button class="btn-like" data-counter="۱۱">بله
+                                                                </button>
+                                                                <button class="btn-like" data-counter="۶">خیر
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        {% endfor %}
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ah-tab-content dt-sl">
+                            {% if request.user.is_authenticated %}
+                            <div class="section-title title-wide no-after-title-wide dt-sl">
+                                <h2>پرسش و پاسخ</h2>
+                                <p class="count-comment">پرسش خود را در مورد محصول مطرح نمایید</p>
+                            </div>
+                            <div class="form-question-answer dt-sl mb-3">
+                                <form action="" method="post" novalidate>
+                                    {% csrf_token %}
+                                    {{ form.name }}
+                                    <br>
+                                    {{ form.body }}
+                                    <button class="btn btn-dark float-right ml-3" type="submit">ثبت پرسش</button>
+                                    <div class="custom-control custom-checkbox float-right mt-2">
+                                        {{ form.notify }}
+                                        <label class="custom-control-label" for="customCheck3">اولین پاسخی که به
+                                            پرسش من داده شد، از طریق ایمیل به من اطلاع دهید.</label>
+                                    </div>
+                                </form>
+                            </div>
+                            {% else %}
+                                <p class="text-danger">برای ثبت پرسش و پاسخ باید وارد حساب خود شوید</p>
+                                <a href="{% url 'accounts:login' %}">ورود به حساب کاربری</a> یا <a href="{% url 'accounts:register' %}">ثبت نام</a>
+                            {% endif %}
+                            <div class="comments-area default">
+                                <div
+                                        class="section-title text-sm-title title-wide no-after-title-wide mt-5 mb-0 dt-sl">
+                                    <h2>پرسش ها و پاسخ ها</h2>
+                                    <p class="count-comment">{{ product.questions.count }} پرسش</p>
+                                </div>
+                                <ol class="comment-list">
+                                    <!-- #comment-## -->
+                                    {% for question in product.get_questions %}
+                                    <li>
+                                        <div class="comment-body">
+                                            <div class="comment-author">
+                                                <span class="icon-comment">?</span>
+                                                <cite class="fn">{{ question.name }}</cite>
+                                                <span class="says">گفت:</span>
+                                                <div class="commentmetadata">
+                                                    <a href="#">
+                                                        {{ question.created }}
+                                                    </a>
+                                                </div>
+                                            </div>
+
+
+                                            <p>{{ question.question }}</p>
+
+                                            <div class="reply"><a class="comment-reply-link" href="#">پاسخ</a></div>
+                                        </div>
+                                    </li>
+                                    {% endfor %}
+                                    <!-- #comment-## -->
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!-- End tabs -->
+            </div>
+            <!-- End Product -->
+            <!-- Start Product-Slider -->
+            <section class="slider-section dt-sl mb-5">
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <div class="section-title text-sm-title title-wide no-after-title-wide">
+                            <h2>محصولات مرتبط</h2>
+                            <a href="{% url 'catalogue:product_list' product.get_category.slug %}">مشاهده همه</a>
+                        </div>
+                    </div>
+
+                    <!-- Start Product-Slider -->
+                    <div class="col-12">
+                        <div class="product-carousel carousel-lg owl-carousel owl-theme">
+                            {% for p in products %}
+                                {% include 'catalogue/pro.html' with product=p %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <!-- End Product-Slider -->
+                </div>
+            </section>
+            <!-- End Product-Slider -->
+        </div>
+    </main>
+    <!-- End main-content -->
+</div>
+
+{% endblock %}

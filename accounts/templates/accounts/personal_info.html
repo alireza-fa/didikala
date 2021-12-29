@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% block title %}اطلاعات شخصی{% endblock %}
+
+{% block content %}
+<main class="main-content dt-sl mb-3">
+            <div class="container main-container">
+                <div class="row">
+                    <!-- Start Sidebar -->
+                    {% include 'accounts/slider.html' %}
+                    <!-- End Sidebar -->
+                    <!-- Start Content -->
+                    <div class="col-xl-9 col-lg-8 col-md-8 col-sm-12">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="px-3">
+                                    <div
+                                        class="section-title text-sm-title title-wide mb-1 no-after-title-wide dt-sl mb-2">
+                                        <h2>اطلاعات شخصی</h2>
+                                    </div>
+                                    <div class="profile-section dt-sl">
+                                        <div class="row">
+                                            <div class="col-md-6 col-sm-12">
+                                                <div class="label-info">
+                                                    <span>نام و نام خانوادگی:</span>
+                                                </div>
+                                                <div class="value-info">
+                                                    <span>{% if not request.user.fullname %}وارد نشده{% else %}{{ request.user.fullname }}{% endif %}</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-sm-12">
+                                                <div class="label-info">
+                                                    <span>پست الکترونیک:</span>
+                                                </div>
+                                                <div class="value-info">
+                                                    <span>{% if not request.user.email %}وارد نشده{% else %}{{ request.user.email }}{% endif %}</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-sm-12">
+                                                <div class="label-info">
+                                                    <span>شماره تلفن همراه:</span>
+                                                </div>
+                                                <div class="value-info">
+                                                    <span>{% if not request.user.phone_number %}وارد نشده{% else %}{{ request.user.phone_number }}{% endif %}</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-sm-12">
+                                                <div class="label-info">
+                                                    <span>کد ملی:</span>
+                                                </div>
+                                                <div class="value-info">
+                                                    <span>{% if not request.user.code_melli %}-{% else %}{{ request.user.code_melli }}{% endif %}</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-sm-12">
+                                                <div class="label-info">
+                                                    <span>دریافت خبرنامه:</span>
+                                                </div>
+                                                <div class="value-info">
+                                                    <span>{% if not request.user.received_news %}خیر{% else %}{{ request.user.received_news }}{% endif %}</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-sm-12">
+                                                <div class="label-info">
+                                                    <span>شماره کارت:</span>
+                                                </div>
+                                                <div class="value-info">
+                                                    <span>{% if not request.user.card_number %}-{% else %}{{ request.user.card_number }}{% endif %}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="profile-section-link">
+                                            <a href="{% url 'accounts:profile_additional' %}" class="border-bottom-dt">
+                                                <i class="mdi mdi-account-edit-outline"></i>
+                                                ویرایش اطلاعات شخصی
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End Content -->
+                </div>
+            </div>
+        </main>
+{% endblock %}

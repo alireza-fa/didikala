@@ -1,0 +1,38 @@
+{% load static %}
+
+<div class="ah-tab-content-wrapper dt-sl px-res-0">
+    <div class="ah-tab-content dt-sl" data-ah-tab-active="true">
+        <div class="row mb-3 mx-0 px-res-0">
+            {% for product in page_obj %}
+            {% include 'catalogue/pro_search.html' with product=product %}
+            {% empty %}
+            <p class="alert alert-warning">محصولی یافت نشد</p>
+            {% endfor %}
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="pagination">
+                    {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}" class="prev"><i
+                            class="mdi mdi-chevron-double-right"></i></a>
+                    {% endif %}
+
+                    {% for page in paginator.page_range %}
+                    {% if page == page_obj.number %}
+                    <a href="?page={{ page }}" class="active-page">{{ page }}</a>
+                    {% elif page > page_obj.number|add:'2' %}
+                    {% elif page < page_obj.number|add:'-2' %}
+                    {% else %}
+                    <a href="?page={{ page }}">{{ page }}</a>
+                    {% endif %}
+                    {% endfor %}
+
+                    {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}" class="next"><i
+                            class="mdi mdi-chevron-double-left"></i></a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,7 @@
+<ul id="search_result">
+    {% for result in search_result %}
+    <li>
+        <a href="{{ result.get_absolute_url }}">{{ result.title }}</a>
+    </li>
+    {% endfor %}
+</ul>

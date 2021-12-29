@@ -1,0 +1,222 @@
+{% load static %}
+
+{% load product_tags %}
+
+{% get_product_type as types %}
+
+{% get_products as products %}
+
+<header class="main-header">
+    <!-- Start ads -->
+    <div class="ads-header-wrapper">
+        <a href="#" class="ads-header hidden-sm" target="_blank"
+           style="background-image: url({% static 'img/banner/large-ads.jpg' %})"></a>
+    </div>
+    <!-- End ads -->
+    <!-- Start topbar -->
+    <div class="container main-container">
+        <div class="topbar dt-sl">
+            <div class="row">
+                <div class="col-lg-2 col-md-3 col-6">
+                    <div class="logo-area">
+                        <a href="{% url 'main:home' %}">
+                            <img src="{% static 'img/logo.png' %}" alt="">
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-5 hidden-sm">
+                    <div class="search-area dt-sl">
+                        <form action="{% url 'catalogue:product_search' %}" class="search" method="get">
+                            <input type="text" id="search_input"
+                                   placeholder="نام کالا، برند و یا دسته مورد نظر خود را جستجو کنید…"
+                                   value="{{ request.GET.q }}" name="q">
+                            <i class="far fa-search search-icon"></i>
+                            <button class="close-search-result" type="button"><i
+                                    class="mdi mdi-close"></i></button>
+                            <div class="search-result">
+                                <ul id="search_result">
+                                    {% for result in search_result %}
+                                    <li>
+                                        <a href="{{ result.get_absolute_url }}">{{ result.title }}</a>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+                <div class="col-md-4 col-6 topbar-left">
+                    <ul class="nav float-left">
+                        {% if request.user.is_authenticated %}
+                        <li class="nav-item account dropdown">
+                            <a class="nav-link" href="#" data-toggle="dropdown" aria-haspopup="true"
+                               aria-expanded="false">
+                                <span class="label-dropdown">حساب کاربری</span>
+                                <i class="mdi mdi-account-circle-outline"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-sm dropdown-menu-left">
+                                <a class="dropdown-item" href="{% url 'accounts:profile' %}">
+                                    <i class="mdi mdi-account-card-details-outline"></i>پروفایل
+                                </a>
+                                <a class="dropdown-item" href="{% url 'accounts:profile_additional' %}">
+                                    <i class="mdi mdi-account-edit-outline"></i>ویرایش حساب کاربری
+                                </a>
+                                <div class="dropdown-divider" role="presentation"></div>
+                                <a class="dropdown-item" href="{% url 'accounts:logout' %}">
+                                    <i class="mdi mdi-logout-variant"></i>خروج
+                                </a>
+                            </div>
+                        </li>
+                        {% else %}
+                        <a class="nav-link" href="{% url 'accounts:login' %}">
+                            <span class="label-dropdown">ورود</span>
+                            <i class="mdi mdi-account-circle-outline"></i>
+                        </a>
+                        <a class="nav-link" href="{% url 'accounts:register' %}">
+                            <span class="label-dropdown">ثبت نام</span>
+                            <i class="mdi mdi-account-circle-outline"></i>
+                        </a>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End topbar -->
+
+    <!-- Start bottom-header -->
+    <div class="bottom-header dt-sl mb-sm-bottom-header">
+        <div class="container main-container">
+            <!-- Start Main-Menu -->
+            <nav class="main-menu d-flex justify-content-md-between justify-content-end dt-sl">
+                <ul class="list hidden-sm">
+                    <li class="list-item category-list">
+                        <a href="#"><i class="fal fa-bars ml-1"></i>دسته بندی کالاها</a>
+                        <ul>
+                            {% for type in types %}
+                            <li>
+                                <a href="{{ type.get_absolute_url }}">{{ type.title }}</a>
+                                <ul class="row">
+                                    {% for category in type|category_parent %}
+                                    <li class="sublist--title"><a href="{{ category.get_absolute_url }}">{{ category.name }}</a></li>
+                                    {% for cat in category|category_child %}
+                                    <li class="sublist--item"><a href="{% url 'catalogue:product_list' cat.slug %}">{{ cat.name }}</a></li>
+                                    {% endfor %}
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                </ul>
+                <div class="nav">
+                    <div class="nav-item cart--wrapper">
+                        <a class="nav-link" href="#">
+                            <span class="label-dropdown">سبد خرید</span>
+                            <i class="mdi mdi-cart-outline"></i>
+                            <span class="count">{{ count }}</span>
+                        </a>
+                        <div class="header-cart-info">
+                            <div class="header-cart-info-header">
+                                <div class="header-cart-info-count">
+                                    {{ count }} کالا
+                                </div>
+                                <a href="{% url 'cart:cart_detail' %}" class="header-cart-info-link">
+                                    <span>مشاهده سبد خرید</span>
+                                </a>
+                            </div>
+                            <ul class="header-basket-list do-nice-scroll">
+                                {% for item in cart %}
+                                <li class="cart-item">
+                                    <a href="{{ item.product.get_absolute_url }}" class="header-basket-list-item">
+                                        <div class="header-basket-list-item-image">
+                                            <img src="{{ item.product.get_image.image.url }}" width="75px" height="75px"
+                                                 alt="">
+                                        </div>
+                                        <div class="header-basket-list-item-content">
+                                            <p class="header-basket-list-item-title">
+                                                {{ item.product.title }}
+                                            </p>
+                                            <div class="header-basket-list-item-footer">
+                                                <div class="header-basket-list-item-props">
+                                                            <span class="header-basket-list-item-props-item">
+                                                                {{ item.quantity }} x
+                                                            </span>
+                                                </div>
+                                                <!--                                                <button class="header-basket-list-item-remove">-->
+                                                <!--                                                    <i class="far fa-trash-alt"></i>-->
+                                                <!--                                                </button>-->
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                            <div class="header-cart-info-footer">
+                                <div class="header-cart-info-total">
+                                    <span class="header-cart-info-total-text">مبلغ قابل پرداخت:</span>
+                                    <p class="header-cart-info-total-amount">
+                                                <span class="header-cart-info-total-amount-number">
+                                                    {{ cart.get_total_price }} <span>تومان</span></span>
+                                    </p>
+                                </div>
+
+                                <div>
+                                    <a href="{% url 'shopping:shopping' %}" class="header-cart-info-submit">
+                                        ثبت سفارش
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn-menu">
+                    <div class="align align__justify">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </button>
+                <div class="side-menu">
+                    <div class="logo-nav-res dt-sl text-center">
+                        <a href="#">
+                            <img src="{% static 'img/logo.png' %}" alt="">
+                        </a>
+                    </div>
+                    <div class="search-box-side-menu dt-sl text-center mt-2 mb-3">
+                        <form action="{% url 'catalogue:product_search' %}" method="get">
+                            <input type="text" placeholder="جستجو کنید..." value="{{ request.GET.q }}" name="q">
+                            <i class="mdi mdi-magnify"></i>
+                        </form>
+                    </div>
+                    <ul class="navbar-nav dt-sl">
+                        {% for type in types %}
+                        <li class="sub-menu">
+                            <a href="{{ type.get_absolute_url }}">{{ type.title }}</a>
+                            <ul>
+                                {% for category in type|category_parent %}
+                                <li class="sub-menu">
+                                    <a href="{{ category.get_absolute_url }}">{{ category.name }}</a>
+                                    <ul>
+                                        {% for cat in category|category_child %}
+                                        <li>
+                                            <a href="{% url 'catalogue:product_list' cat.slug %}">{{ cat.name }}</a>
+                                        </li>
+                                        {% endfor %}
+                                    </ul>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="overlay-side-menu">
+                </div>
+            </nav>
+            <!-- End Main-Menu -->
+        </div>
+    </div>
+    <!-- End bottom-header -->
+</header>

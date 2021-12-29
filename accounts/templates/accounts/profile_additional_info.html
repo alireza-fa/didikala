@@ -1,0 +1,148 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}ویرایش اطلاعات شخصی{% endblock %}
+
+{% block content %}
+<!-- Start main-content -->
+<main class="main-content dt-sl mb-3">
+    <div class="container main-container">
+        <div class="row">
+            <!-- Start Sidebar -->
+            {% include 'accounts/slider.html' %}
+            <!-- End Sidebar -->
+            <!-- Start Content -->
+            <div class="col-xl-9 col-lg-8 col-md-8 col-sm-12">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="px-3 px-res-0">
+                            <div
+                                    class="section-title text-sm-title title-wide mb-1 no-after-title-wide dt-sl mb-2 px-res-1">
+                                <h2>ویرایش اطلاعات شخصی</h2>
+                            </div>
+                            <div class="form-ui additional-info dt-sl dt-sn pt-4">
+                                <form action="" method="post" enctype="multipart/form-data" novalidate>
+                                    {% csrf_token %}
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <div class="form-row-title">
+                                                <h3>نام</h3>
+                                            </div>
+                                            <div class="form-row">
+                                                {{ form.first_name }}
+                                                <a class="text-danger">{{ form.first_name.errors }}</a>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6 mb-3">
+                                            <div class="form-row-title">
+                                                <h3>نام و نام خانوادگی</h3>
+                                            </div>
+                                            <div class="form-row">
+                                                {{ form.fullname }}
+                                                <a class="text-danger">{{ form.fullname.errors }}</a>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <div class="form-row-title">
+                                                <h3>کد ملی</h3>
+                                            </div>
+                                            <div class="form-row">
+                                                {{ form.code_melli }}
+                                                <a class="text-danger">{{ form.code_melli.errors }}</a>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <div class="form-row-title">
+                                                <h3>شماره موبایل</h3>
+                                            </div>
+                                            <div class="form-row">
+                                                {{ form.phone_number }}
+                                                <a class="text-danger">{{ form.phone_number.errors }}</a>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <div class="form-row-title">
+                                                <h3>آدرس ایمیل</h3>
+                                            </div>
+                                            <div class="form-row">
+                                                {{ form.email }}
+                                                <a class="text-danger">{{ form.email.errors }}</a>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <div class="form-row-title">
+                                                <h3>عکس پروفایل</h3>
+                                            </div>
+                                            <div class="form-row mt-2">
+                                                <div class="input-group">
+                                                    <div class="custom-file">
+                                                        {{ form.image }}
+                                                        <label class="custom-file-label"
+                                                               for="inputGroupFile04">انتخاب
+                                                            عکس</label>
+                                                    </div>
+                                                    <div>
+                                                        <a class="text-danger">{{ form.image.errors }}</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 mb-3">
+                                            <div class="pt-2 pb-2 mb-3 dt-sl">
+                                                <div class="form-row-title mb-2">
+                                                    <h3>شماره کارت</h3>
+                                                </div>
+                                                <div class="form-row">
+                                                    {{ form.card_number }}
+                                                    <a class="text-danger">{{ form.card_number.errors }}</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 mb-3">
+                                            <div class="form-row mt-2">
+                                                <div class="custom-control custom-checkbox float-right mt-2">
+                                                    {{ form.foreign_person }}
+                                                    <label class="custom-control-label text-justify"
+                                                           for="customCheck3">
+                                                        تبعه خارجی فاقد کد ملی هستم
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <a class="text-danger">{{ form.foreign_person.errors }}</a>
+                                            <div class="form-row mt-2">
+                                                <div class="custom-control custom-checkbox float-right mt-2">
+                                                    {{ form.shared_news }}
+                                                    <label class="custom-control-label text-justify"
+                                                           for="customCheck4">
+                                                        اشتراک در خبرنامه دیدیکالا
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <a class="text-danger">{{ form.shared_news.errors }}</a>
+                                        </div>
+                                    </div>
+                                    <div class="dt-sl">
+                                        <div class="form-row mt-3 justify-content-end">
+                                            <button class="btn-primary-cm btn-with-icon ml-2" type="submit">
+                                                <i class="mdi mdi-account-circle-outline"></i>
+                                                ثبت اطلاعات کاربری
+                                            </button>
+                                            <a href="#" class="btn-primary-cm bg-secondary">انصراف</a>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Content -->
+        </div>
+        <!-- Start Product-Slider -->
+        <!-- End Product-Slider -->
+    </div>
+</main>
+<!-- End main-content -->
+{% endblock %}

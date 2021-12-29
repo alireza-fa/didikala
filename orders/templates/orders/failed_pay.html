@@ -1,0 +1,200 @@
+{% extends 'orders/base_shopping.html' %}
+
+{% load static %}
+
+{% block title %}پرداخت ناموفق {% endblock %}
+
+{% block content %}
+
+    <div class="wrapper shopping-page">
+        <!-- Start header-shopping -->
+        <header class="header-shopping dt-sl">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 text-center pt-2">
+                        <div class="header-shopping-logo dt-sl">
+                            <a href="#">
+                                <img src="{% static 'img/logo.png' %}" alt="">
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-12 text-center">
+                        <ul class="checkout-steps">
+                            <li>
+                                <a href="#" class="active">
+                                    <span>اطلاعات ارسال</span>
+                                </a>
+                            </li>
+                            <li class="active">
+                                <a href="#" class="active">
+                                    <span>پرداخت</span>
+                                </a>
+                            </li>
+                            <li class="active">
+                                <a href="#" class="active">
+                                    <span>اتمام خرید و ارسال</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- End header-shopping -->
+        <!-- Start main-content -->
+        <main class="main-content dt-sl mt-4 mb-3">
+            <div class="container main-container">
+                <div class="row">
+                    <div class="cart-page-content col-12 px-0">
+                        <div class="checkout-alert dt-sn dt-sn--box mb-4">
+                            <div class="circle-box-icon failed">
+                                <i class="mdi mdi-close"></i>
+                            </div>
+                            <div class="checkout-alert-title">
+                                <h4> سفارش <span
+                                        class="checkout-alert-highlighted checkout-alert-highlighted-success">DDC-75007560</span>
+                                    ثبت شد اما پرداخت ناموفق بود.
+                                </h4>
+                            </div>
+                            <div class="checkout-alert-content">
+                                <p>
+                                    <span class="checkout-alert-content-failed">برای جلوگیری از لغو سیستمی سفارش، تا ۱
+                                        ساعت آینده پرداخت را انجام دهید.</span>
+                                    <br>
+                                    <span class="checkout-alert-content-small px-res-1">
+                                        چنانچه طی این فرایند مبلغی از حساب شما کسر شده است، طی ۷۲ ساعت آینده به حساب شما
+                                        باز خواهد گشت.
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+                        <section class="checkout-details dt-sl dt-sn dt-sn--box mt-4 pt-4 pb-3 pr-3 pl-3 mb-5">
+                            <div class="checkout-details-title">
+                                <h4 class="checkout-details-title px-res-1">
+                                    کد سفارش:
+                                    <span>
+                                        {{ order.id }}
+                                    </span>
+                                </h4>
+                                <div class="row">
+                                    <div class="col-lg-9 col-md-8 col-12">
+                                        <div class="checkout-details-title px-res-1">
+                                            <p>
+                                                جزئیات این سفارش را می‌توانید با کلیک بر روی دکمه
+                                                <a href="#" class="border-bottom-dt">پیگیری سفارش</a>
+                                                مشاهده نمایید.
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-md-4 col-12 px-res-1">
+                                        <a href="{% url 'accounts:profile_order_detail' order.id %}"
+                                            class="btn-primary-cm bg-secondary btn-with-icon d-block text-center pr-0">
+                                            <i class="mdi mdi-shopping"></i>
+                                            پیگیری سفارش
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                        <div class="section-title text-sm-title title-wide no-after-title-wide mb-0 dt-sl px-res-1">
+                            <h2>جزئیات پرداخت</h2>
+                        </div>
+                        <section class="checkout-details dt-sl dt-sn dt-sn--box mb-4 pt-2 pb-3 pl-3 pr-3">
+                            <div class="row mt-3">
+                                <div class="col-12">
+                                    <div class="table-responsive">
+                                        <table class="checkout-orders-table">
+                                            <tr>
+                                                <td class="numrow">
+                                                    <p>
+                                                        ردیف
+                                                    </p>
+                                                </td>
+                                                <td class="gateway">
+                                                    <p>
+                                                        درگاه
+                                                    </p>
+                                                </td>
+                                                <td class="id">
+                                                    <p>
+                                                        شماره پیگیری
+                                                    </p>
+                                                </td>
+                                                <td class="date">
+                                                    <p>
+                                                        تاریخ
+                                                    </p>
+                                                </td>
+                                                <td class="price">
+                                                    <p>
+                                                        مبلغ
+                                                    </p>
+                                                </td>
+                                                <td class="status">
+                                                    <p>
+                                                        وضعیت
+                                                    </p>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="numrow">
+                                                    <p>1</p>
+                                                </td>
+                                                <td class="gateway">
+                                                    <p>زرین پال</p>
+                                                </td>
+                                                <td class="id">
+                                                    <p>{{ order.id }}</p>
+                                                </td>
+                                                <td class=" date">
+                                                    <p>۵ آبان ۱۳۹۸</p>
+                                                </td>
+                                                <td class="price">
+                                                    <p> {{ order.get_total_price }} تومان</p>
+                                                </td>
+                                                <td class="status">
+                                                    <p>پرداخت ناموفق</p>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <!-- End main-content -->
+        <!-- Start mini-footer -->
+        <footer class="mini-footer dt-sl">
+            <div class="container main-container">
+                <div class="row">
+                    <div class="col-md-6 col-sm-12 text-left">
+                        <i class="mdi mdi-phone-outline"></i>
+                        شماره تماس : <a href="#">
+                            ۶۱۹۳۰۰۰۰
+                            - ۰۲۱
+                        </a>
+                    </div>
+                    <div class="col-md-6 col-sm-12 text-right">
+                        <i class="mdi mdi-email-outline"></i>
+                        آدرس ایمیل : <a href="#">info@gmail.com</a>
+                    </div>
+                    <div class="col-12 text-center mt-2">
+                        <p class="text-secondary text-footer">
+                            استفاده از کارت هدیه یا کد تخفیف، درصفحه ی پرداخت امکان پذیر است.
+                        </p>
+                    </div>
+                    <div class="col-12 text-center">
+                        <div class="copy-right-mini-footer">
+                            Copyright © 2021 Didikala
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!-- End mini-footer -->
+    </div>
+
+{% endblock %}

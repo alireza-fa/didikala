@@ -1,0 +1,184 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}پروفایل{% endblock %}
+
+{% block content %}
+<div class="wrapper">
+    <!-- Start main-content -->
+    <main class="main-content dt-sl mb-3">
+        <div class="container main-container">
+            <div class="row">
+                <!-- Start Sidebar -->
+                {% include 'accounts/slider.html' %}
+                <!-- End Sidebar -->
+                <!-- Start Content -->
+                <div class="col-xl-9 col-lg-8 col-md-8 col-sm-12">
+                    <div class="row">
+                        <div class="col-xl-6 col-lg-12">
+                            <div class="px-3">
+                                <div
+                                        class="section-title text-sm-title title-wide mb-1 no-after-title-wide dt-sl mb-2">
+                                    <h2>اطلاعات شخصی</h2>
+                                </div>
+                                <div class="profile-section dt-sl">
+                                    <div class="row">
+                                        <div class="col-md-6 col-sm-12">
+                                            <div class="label-info">
+                                                <span>نام و نام خانوادگی:</span>
+                                            </div>
+                                            <div class="value-info">
+                                                <span>
+                                                    {% if not request.user.fullname %}وارد نشده{% else %}{{ request.user.fullname }}{% endif %}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-sm-12">
+                                            <div class="label-info">
+                                                <span>پست الکترونیک:</span>
+                                            </div>
+                                            <div class="value-info">
+                                                <span>
+                                                    {% if not request.user.email %}وارد نشده{% else %}{{ request.user.email }}{% endif %}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-sm-12">
+                                            <div class="label-info">
+                                                <span>شماره تلفن همراه:</span>
+                                            </div>
+                                            <div class="value-info">
+                                                <span>
+                                                    {% if not request.user.phone_number %}وارد نشده{% else %}{{ request.user.phone_number }}{% endif %}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-sm-12">
+                                            <div class="label-info">
+                                                <span>کد ملی:</span>
+                                            </div>
+                                            <div class="value-info">
+                                                <span>
+                                                    {% if not request.user.code_melli %}وارد نشده{% else %}{{ request.user.code_melli }}{% endif %}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-sm-12">
+                                            <div class="label-info">
+                                                <span>دریافت خبرنامه:</span>
+                                            </div>
+                                            <div class="value-info">
+                                                <span>
+                                                    {% if not request.user.received_news %}خیر{% else %}بله{% endif %}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-sm-12">
+                                            <div class="label-info">
+                                                <span>شماره کارت:</span>
+                                            </div>
+                                            <div class="value-info">
+                                                <span>
+                                                    {% if not request.user.card_number %} - {% else %}{{ request.user.card_number }}{% endif %}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="profile-section-link">
+                                        <a href="{% url 'accounts:profile_additional' %}" class="border-bottom-dt">
+                                            <i class="mdi mdi-account-edit-outline"></i>
+                                            ویرایش اطلاعات شخصی
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-12">
+                            <div class="px-3">
+                                <div
+                                        class="section-title text-sm-title title-wide mb-1 no-after-title-wide dt-sl mb-2">
+                                    <h2>لیست آخرین علاقه‌مندی‌ها</h2>
+                                </div>
+                                <div class="profile-section dt-sl">
+                                    <ul class="list-favorites">
+                                        {% for favorite in favorites %}
+                                        <li>
+                                            <a href="{{ favorite.product.get_absolute_url }}">
+                                                <img src="{{ favorite.product.get_image.image.url }}" alt="">
+                                                <span>{{ favorite.product.title }}</span>
+                                            </a>
+                                            <button>
+                                                <a class="mdi mdi-trash-can-outline" href="{% url 'accounts:favorite_delete' favorite.product.id %}"></a>
+                                            </button>
+                                        </li>
+                                        {% empty %}
+                                        <p>لیست علاقه مندی شما خالی است</p>
+                                        {% endfor %}
+                                    </ul>
+                                    <div class="profile-section-link">
+                                        <a href="{% url 'accounts:profile_favorite' %}" class="border-bottom-dt">
+                                            <i class="mdi mdi-square-edit-outline"></i>
+                                            مشاهده و ویرایش لیست مورد علاقه
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-5">
+                        <div class="col-12">
+                            <div
+                                    class="section-title text-sm-title title-wide mb-1 no-after-title-wide dt-sl mb-2 px-res-1">
+                                <h2>آخرین سفارش‌ها</h2>
+                            </div>
+                            <div class="dt-sl">
+                                <div class="table-responsive">
+                                    <table class="table table-order">
+                                        <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>شماره سفارش</th>
+                                            <th>تاریخ ثبت سفارش</th>
+                                            <th>مبلغ قابل پرداخت</th>
+                                            <th>مبلغ کل</th>
+                                            <th>عملیات پرداخت</th>
+                                            <th>جزییات</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for order in orders %}
+                                        <tr>
+                                            <td>1</td>
+                                            <td>DDC-57456951</td>
+                                            <td>{{ order.created }}</td>
+                                            <td>{{ order.get_total_price }} </td>
+                                            <td>{{ order.get_total_price }} تومان</td>
+                                            <td>{% if order.paid %}پرداخت شده{% else %}لغو شده{% endif %}</td>
+                                            <td class="details-link">
+                                                <a href="{% url 'accounts:profile_order_detail' order.id %}">
+                                                    <i class="mdi mdi-chevron-left"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        {% empty %}
+                                        <p>لیست سفارش شما خالی است</p>
+                                        {% endfor %}
+                                            <td class="link-to-orders" colspan="7"><a href="{% url 'accounts:profile_order' %}">مشاهده لیست سفارش
+                                                ها</a></td>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- End Content -->
+            </div>
+            <!-- Start Product-Slider -->
+            <!-- End Product-Slider -->
+        </div>
+    </main>
+    <!-- End main-content -->
+</div>
+{% endblock %}

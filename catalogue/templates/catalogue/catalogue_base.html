@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% block data %}{% endblock %}
+
+<script>
+        $(document).ready(function () {
+            var nonLinearStepSlider = document.getElementById('slider-non-linear-step');
+            noUiSlider.create(nonLinearStepSlider, {
+                start: [0, 20000],
+                connect: true,
+                direction: 'rtl',
+                format: wNumb({
+                    decimals: 0,
+                    thousand: ','
+                }),
+                range: {
+                    'min': [0],
+                    '10%': [500, 500],
+                    '50%': [40000, 1000],
+                    'max': [100000]
+                }
+            });
+            var nonLinearStepSliderValueElement = document.getElementById('slider-non-linear-step-value');
+            nonLinearStepSlider.noUiSlider.on('update', function (values) {
+                nonLinearStepSliderValueElement.innerHTML = values.join(' - ');
+            });
+        });
+
+</script>
+
+{% endblock %}

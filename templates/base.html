@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="fa">
+{% load static %}
+
+{% load render_partial %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="theme-color" content="#f7858d">
+    <meta name="msapplication-navbutton-color" content="#f7858d">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#f7858d">
+    <title>{% block title %}{% endblock %}</title>
+    {% include 'shared/css.html' %}
+</head>
+<body>
+<div class="wrapper">
+    <!-- Start header -->
+    {% render_partial 'main:navbar_partial' %}
+    <!-- End header -->
+    {% block content %}
+    {% include 'shared/messages.html' %}
+    {% endblock %}
+    <!-- Start footer -->
+    {% include 'shared/footer.html' %}
+    <!-- End footer -->
+</div>
+<!-- colorPanel -->
+
+<!-- end colorPanel -->
+<!-- Start js -->
+{% include 'shared/js.html' %}
+<!-- End js -->
+{% block js_files %}{% endblock %}
+
+<script src="{% static 'js/search.js' %}"></script>
+</body>
+</html>

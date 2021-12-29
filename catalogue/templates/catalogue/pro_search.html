@@ -1,0 +1,43 @@
+{% load static %}
+
+{% load product_tags %}
+
+{% load thumbnail %}
+
+<div class="col-lg-3 col-md-4 col-sm-6 col-12 px-10 mb-1 px-res-0">
+    <div class="product-card mb-2 mx-res-0">
+        {% if product.special_sale %}
+        <div class="promotion-badge">
+            فروش ویژه
+        </div>
+        {% endif %}
+        <div class="product-head">
+            <div class="rating-stars">
+                {% if product.get_total_rate %}
+                <div class="rating-stars">
+                    {% for i in product.get_total_rate|times %}
+                    <i class="mdi mdi-star active"></i>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+            {% if product.discount %}
+            <div class="discount">
+                <span>{{ product.discount }}%</span>
+            </div>
+            {% endif %}
+        </div>
+        <a class="product-thumb" href="{{ product.get_absolute_url }}">
+            {% thumbnail product.get_image.image "200x200" as img %}
+            <img src="{{ img.url }}" alt="{{ product.title }}">
+            {% endthumbnail %}
+        </a>
+        <div class="product-card-body">
+            <h5 class="product-title">
+                <a href="{{ product.get_absolute_url }}">{{ product.title }}</a>
+            </h5>
+            <a class="product-meta" href="shop-categories.html">{{ category.name }}</a>
+            <span class="product-price">{% if product.get_stock %}{{ product.get_stock.price }} تومان{% else %}قیمت ندارد{% endif %}</span>
+        </div>
+    </div>
+</div>
