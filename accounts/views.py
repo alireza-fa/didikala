@@ -7,6 +7,7 @@ from django.urls import reverse_lazy
 from django.views.decorators.http import require_GET
 from catalogue.models import Product, ProductFavorite, View
 from orders.models import Order
+from shipping.forms import AddAddressForm, EditAddressForm
 from shipping.models import Address
 from .forms import UserLoginForm, UserRegistrationForm, UserChangePasswordForm, ProfileAdditionalForm, \
     UserPasswordResetForm, UserPasswordResetConfirmForm
@@ -191,7 +192,13 @@ def comment_delete(request, comment_id):
 @require_GET
 def profile_address(request):
     addresses = Address.objects.filter(user=request.user)
-    return render(request, 'accounts/profile_address.html', {"addresses": addresses})
+    form = AddAddressForm()
+    # form_edit = EditAddressForm(initial={
+    #     "fullname": address.fullname, "phone_number": address.phone_number,
+    #     "postal_address": address.postal_address, "postal_code": address.postal_code,
+    #     "province": address.province, "city": address.city
+    # })
+    return render(request, 'accounts/profile_address.html', {"addresses": addresses, "form": form})
 
 
 @login_required

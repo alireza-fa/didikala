@@ -2,33 +2,34 @@ from django import forms
 from shipping.models import Address
 
 error_msg = {
-    "valid": 'این فیلد اجباری است'
+    "valid": 'ایمیل وارد شده معتبر نمیباشد',
+    "required": 'این فیلد اجباری است',
 }
 
 
 class AddAddressForm(forms.Form):
     fullname = forms.CharField(
-        widget=forms.TextInput(attrs={"class": 'input-ui pr-2 text-right', "placeholder": 'نام خود را وارد نمایید'}),
+        widget=forms.TextInput(attrs={"class": 'input-ui pr-2 text-right', "placeholder": 'نام خود را وارد نمایید', "id": 'fullname'}),
         error_messages=error_msg
     )
     phone_number = forms.CharField(
-        widget=forms.TextInput(attrs={"class": 'input-ui pl-2 dir-ltr text-left', "placeholder": '09xxxxxxxxx'}),
+        widget=forms.TextInput(attrs={"class": 'input-ui pl-2 dir-ltr text-left', "placeholder": '09xxxxxxxxx', "id": 'phone_number'}),
         error_messages=error_msg
     )
     postal_address = forms.CharField(
-        widget=forms.Textarea(attrs={"class": 'input-ui pr-2 text-right', "placeholder": ' آدرس تحویل گیرنده را وارد نمایید'}),
+        widget=forms.Textarea(attrs={"class": 'input-ui pr-2 text-right', "placeholder": ' آدرس تحویل گیرنده را وارد نمایید', "id": 'postal_address'}),
         error_messages=error_msg
     )
     postal_code = forms.CharField(
-        widget=forms.TextInput(attrs={"class": 'input-ui pl-2 dir-ltr text-left placeholder-right', "placeholder": 'کد پستی را بدون خط تیره بنویسید'}),
+        widget=forms.TextInput(attrs={"class": 'input-ui pl-2 dir-ltr text-left placeholder-right', "placeholder": 'کد پستی را بدون خط تیره بنویسید', "id": 'postal_code'}),
         error_messages=error_msg
     )
     province = forms.CharField(
-        widget=forms.TextInput(attrs={"class": 'input-ui pr-2 text-right'}),
+        widget=forms.TextInput(attrs={"class": 'input-ui pr-2 text-right', "id": 'province'}),
         error_messages=error_msg
     )
     city = forms.CharField(
-        widget=forms.TextInput(attrs={"class": 'input-ui pl-2 dir-ltr text-left placeholder-right'}),
+        widget=forms.TextInput(attrs={"class": 'input-ui pl-2 dir-ltr text-left placeholder-right', "id": 'city'}),
         error_messages=error_msg
     )
 

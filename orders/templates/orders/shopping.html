@@ -50,7 +50,7 @@
                         <h2>انتخاب آدرس تحویل سفارش</h2>
                     </div>
                     <section class="page-content dt-sl">
-                        {% if address %}
+                        {% if disable_addresses %}
                         <div class="address-section">
                             <div class="checkout-contact dt-sn dt-sn--box border px-0 pt-0 pb-0">
                                 <div class="checkout-contact-content">
@@ -105,6 +105,7 @@
                                                     <p class="checkout-address-text">
                                                             <span>{{ address.province }}، {{ address.city }}،{{ address.postal_address }}</span>
                                                     </p>
+                                                    {% if address %}
                                                     <ul class="checkout-address-list">
                                                         <li>
                                                             <ul class="checkout-address-contact-info">
@@ -126,6 +127,7 @@
                                                     <button class="checkout-address-btn-submit">سفارش به این آدرس
                                                         ارسال می‌شود.
                                                     </button>
+                                                    {% endif %}
                                                 </div>
                                             </div>
                                         </div>
@@ -192,7 +194,6 @@
                             </div>
                         </div>
                         {% else %}
-                            <p>شما آدرسی را ثبت نکردید</p>
                             <a href="{% url 'shipping:add_address' %}">ثبت آدرس</a>
                         {% endif %}
                         <form method="post" id="shipping-data-form" class="dt-sn dt-sn--box pt-3 pb-3">

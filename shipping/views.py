@@ -1,5 +1,7 @@
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
+from django.template.loader import render_to_string
 from django.views.decorators.http import require_POST, require_http_methods, require_GET
 from .forms import AddAddressForm, EditAddressForm
 from .models import Address
@@ -11,7 +13,12 @@ def add_address(request):
         form = AddAddressForm(request.POST)
         if form.is_valid():
             form.save(request.user)
-            return redirect('accounts:profile_address')
+            t = render_to_string('shipping/ajax/row.html', {'addresses': Address.objects.filter(user=request.user)})
+            url = '/accounts/profile/address/'
+            return JsonResponse({"data": t, "url": url, "status": 'ok'}, safe=False)
+        else:
+            t = render_to_string('shipping/ajax/new_address_form.html', {"form": form})
+            return JsonResponse({"data": t, "status": 'bad'}, safe=False)
     else:
         form = AddAddressForm()
     return render(request, 'shipping/add_address.html', {"form": form})

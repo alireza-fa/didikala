@@ -4,8 +4,106 @@
 
 {% block title %}آدرس های من{% endblock %}
 
+{% block js_files %}
+    <script src="{% static 'js/ajax/address.js' %}"></script>
+{% endblock %}
+
 {% block content %}
 
+<!--<div class="wrapper">-->
+<!--    &lt;!&ndash; Start main-content &ndash;&gt;-->
+<!--    <main class="main-content dt-sl mb-3">-->
+<!--        <div class="container main-container">-->
+<!--            <div class="row">-->
+<!--                &lt;!&ndash; Start Sidebar &ndash;&gt;-->
+<!--                {% include 'accounts/slider.html' %}-->
+<!--                &lt;!&ndash; End Sidebar &ndash;&gt;-->
+<!--                &lt;!&ndash; Start Content &ndash;&gt;-->
+<!--                <div class="col-xl-9 col-lg-8 col-md-8 col-sm-12">-->
+<!--                    <div class="row">-->
+<!--                        <div class="col-12">-->
+<!--                            <div-->
+<!--                                    class="section-title text-sm-title title-wide mb-1 no-after-title-wide dt-sl mb-2 px-res-1">-->
+<!--                                <h2>آدرس ها</h2>-->
+<!--                            </div>-->
+<!--                            <div class="dt-sl">-->
+<!--                                <div class="row">-->
+<!--                                    <div class="col-lg-6 col-md-12">-->
+<!--                                        <div class="card-horizontal-address text-center px-4">-->
+<!--                                            <a class="checkout-address-location" href="{% url 'shipping:add_address' %}"-->
+<!--                                               data-target="#modal-location">-->
+<!--                                                <strong>ایجاد آدرس جدید</strong>-->
+<!--                                                <i class="mdi mdi-map-marker-plus"></i>-->
+<!--                                            </a>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                    {% for address in addresses %}-->
+<!--                                    <div class="col-lg-6 col-md-12">-->
+<!--                                        <div class="card-horizontal-address">-->
+<!--                                            <div class="card-horizontal-address-desc">-->
+<!--                                                <h4 class="card-horizontal-address-full-name">{{ address.fullname-->
+<!--                                                    }}</h4>-->
+<!--                                                <p>-->
+<!--                                                    {{ address.postal_address }}-->
+<!--                                                </p>-->
+<!--                                            </div>-->
+<!--                                            <div class="card-horizontal-address-data">-->
+<!--                                                <ul class="card-horizontal-address-methods float-right">-->
+<!--                                                    <li class="card-horizontal-address-method">-->
+<!--                                                        <i class="mdi mdi-email-outline"></i>-->
+<!--                                                        کدپستی : <span>{{ address.postal_code }}</span>-->
+<!--                                                    </li>-->
+<!--                                                    <li class="card-horizontal-address-method">-->
+<!--                                                        <i class="mdi mdi-cellphone-iphone"></i>-->
+<!--                                                        تلفن همراه : <span>{{ address.phone_number }}</span>-->
+<!--                                                    </li>-->
+<!--                                                </ul>-->
+<!--                                                <div class="card-horizontal-address-actions">-->
+<!--                                                    <a class="btn-note"-->
+<!--                                                       href="{% url 'shipping:edit_address' address.id %}"-->
+<!--                                                       data-target="">ویرایش-->
+<!--                                                    </a>-->
+<!--                                                    <a class="btn-note"-->
+<!--                                                       href="{% url 'shipping:delete_address' address.id %}">حذف</a>-->
+<!--                                                </div>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                    {% empty %}-->
+<!--                                    <p class="alert alert-warning">شما تاکنون آدرسی را ثبت نکرده اید</p>-->
+<!--                                    {% endfor %}-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                &lt;!&ndash; End Content &ndash;&gt;-->
+<!--            </div>-->
+<!--            &lt;!&ndash; Start Product-Slider &ndash;&gt;-->
+<!--            &lt;!&ndash; End Product-Slider &ndash;&gt;-->
+<!--        </div>-->
+<!--    </main>-->
+<!--    <div class="modal fade" id="remove-location" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"-->
+<!--         aria-hidden="true">-->
+<!--        <div class="modal-dialog modal-dialog-centered" role="document">-->
+<!--            <div class="modal-content">-->
+<!--                <div class="modal-header">-->
+<!--                    <h5 class="modal-title mb-3" id="exampleModalLabel">آیا مطمئنید که-->
+<!--                        این آدرس حذف شود؟</h5>-->
+<!--                </div>-->
+<!--                <div class="modal-footer">-->
+<!--                    <a type="button" class="remodal-general-alert-button remodal-general-alert-button&#45;&#45;cancel"-->
+<!--                       data-dismiss="modal">خیر-->
+<!--                    </a>-->
+<!--                    <a href=""-->
+<!--                       class="remodal-general-alert-button remodal-general-alert-button&#45;&#45;approve">بله-->
+<!--                    </a>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    &lt;!&ndash; End Modal remove-location &ndash;&gt;-->
+<!--</div>-->
 <div class="wrapper">
     <!-- Start main-content -->
     <main class="main-content dt-sl mb-3">
@@ -16,7 +114,7 @@
                 <!-- End Sidebar -->
                 <!-- Start Content -->
                 <div class="col-xl-9 col-lg-8 col-md-8 col-sm-12">
-                    <div class="row">
+                    <div class="row" id="row_address">
                         <div class="col-12">
                             <div
                                     class="section-title text-sm-title title-wide mb-1 no-after-title-wide dt-sl mb-2 px-res-1">
@@ -26,11 +124,11 @@
                                 <div class="row">
                                     <div class="col-lg-6 col-md-12">
                                         <div class="card-horizontal-address text-center px-4">
-                                            <a class="checkout-address-location" href="{% url 'shipping:add_address' %}"
+                                            <button class="checkout-address-location" data-toggle="modal"
                                                     data-target="#modal-location">
                                                 <strong>ایجاد آدرس جدید</strong>
                                                 <i class="mdi mdi-map-marker-plus"></i>
-                                            </a>
+                                            </button>
                                         </div>
                                     </div>
                                     {% for address in addresses %}
@@ -39,7 +137,7 @@
                                             <div class="card-horizontal-address-desc">
                                                 <h4 class="card-horizontal-address-full-name">{{ address.fullname }}</h4>
                                                 <p>
-                                                    {{ address.postal_address }}
+                                                    {{ address.province }}، {{ address.city }}، {{ address.postal_address }}
                                                 </p>
                                             </div>
                                             <div class="card-horizontal-address-data">
@@ -54,16 +152,16 @@
                                                     </li>
                                                 </ul>
                                                 <div class="card-horizontal-address-actions">
-                                                    <a class="btn-note" href="{% url 'shipping:edit_address' address.id %}"
-                                                            data-target="">ویرایش
+                                                    <button class="btn-note" data-toggle="modal"
+                                                            data-target="#modal-location-edit">ویرایش
+                                                    </button>
+                                                    <a class="btn-note" href="{% url 'shipping:delete_address' address.id %}"
+                                                                id="remove_location">حذف
                                                     </a>
-                                                <a class="btn-note" href="{% url 'shipping:delete_address' address.id %}" >حذف</a>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    {% empty %}
-                                        <p class="alert alert-warning">شما تاکنون آدرسی را ثبت نکرده اید</p>
                                     {% endfor %}
                                 </div>
                             </div>
@@ -72,30 +170,371 @@
                 </div>
                 <!-- End Content -->
             </div>
-            <!-- Start Product-Slider -->
-            <!-- End Product-Slider -->
         </div>
     </main>
-    <div class="modal fade" id="remove-location" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    <!-- End main-content -->
+    <!-- Start Modal location new -->
+    <div class="modal fade" id="modal-location" role="dialog" aria-labelledby="exampleModalCenterTitle"
          aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-dialog modal-lg send-info modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title mb-3" id="exampleModalLabel">آیا مطمئنید که
-                        این آدرس حذف شود؟</h5>
+                    <h5 class="modal-title" id="exampleModalCenterTitle">
+                        <i class="now-ui-icons location_pin"></i>
+                        افزودن آدرس جدید
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-                <div class="modal-footer">
-                    <a type="button" class="remodal-general-alert-button remodal-general-alert-button--cancel"
-                            data-dismiss="modal">خیر
-                    </a>
-                    <a href=""
-                            class="remodal-general-alert-button remodal-general-alert-button--approve">بله
-                    </a>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-12">
+                            <div class="form-ui dt-sl">
+                                <form class="form-account" action="" id="new_address_form">
+                                    <div class="row">
+                                        <div class="col-md-6 col-sm-12 mb-2">
+                                            <div class="form-row-title">
+                                                <h4>
+                                                    نام و نام خانوادگی
+                                                </h4>
+                                            </div>
+                                            <div class="form-row">
+                                                {{ form.fullname }}
+                                            </div>
+                                            <a class="text-danger">{{ form.fullname.errors }}</a>
+                                        </div>
+                                        <div class="col-md-6 col-sm-12 mb-2">
+                                            <div class="form-row-title">
+                                                <h4>
+                                                    شماره موبایل
+                                                </h4>
+                                            </div>
+                                            <div class="form-row">
+                                                {{ form.phone_number }}
+                                            </div>
+                                            <a class="text-danger">{{ form.phone_number.errors }}</a>
+                                        </div>
+                                        <div class="col-md-6 col-sm-12 mb-2">
+                                            <div class="form-row-title">
+                                                <h4>
+                                                    استان
+                                                </h4>
+                                            </div>
+                                            <div class="form-row">
+                                                {{ form.province }}
+                                            </div>
+                                            <a class="text-danger">{{ form.province.errors }}</a>
+                                        </div>
+                                        <div class="col-md-6 col-sm-12 mb-2">
+                                            <div class="form-row-title">
+                                                <h4>
+                                                    شهر
+                                                </h4>
+                                            </div>
+                                            <div class="form-row">
+                                                {{ form.city }}
+                                            </div>
+                                            <a class="text-danger">{{ form.city.errors }}</a>
+                                        </div>
+                                        <div class="col-12 mb-2">
+                                            <div class="form-row-title">
+                                                <h4>
+                                                    آدرس پستی
+                                                </h4>
+                                            </div>
+                                            <div class="form-row">
+                                                {{ form.postal_address }}
+                                            </div>
+                                            <a class="text-danger">{{ form.postal_address.errors }}</a>
+                                        </div>
+                                        <div class="col-12 mb-2">
+                                            <div class="form-row-title">
+                                                <h4>
+                                                    کد پستی
+                                                </h4>
+                                            </div>
+                                            <div class="form-row">
+                                                {{ form.postal_code }}
+                                            </div>
+                                            <a class="text-danger">{{ form.postal_code.errors }}</a>
+                                        </div>
+                                    </div>
+                                </form>
+                                <div class="col-12 pr-4 pl-4">
+                                    <button type="button" class="btn btn-sm btn-primary btn-submit-form" id="add_form_submit">ثبت
+                                        و
+                                        ارسال به این آدرس
+                                    </button>
+                                    <button type="button" class="btn-link-border float-left mt-2" data-dismiss="modal" id="cancel_add">
+                                        انصراف
+                                        و بازگشت
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- End Modal remove-location -->
+    <!-- End Modal location new -->
+    <!-- Start Modal location edit -->
+    <div class="modal fade" id="modal-location-edit" role="dialog" aria-labelledby="exampleModalCenterTitle"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg send-info modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalCenterTitle">
+                        <i class="now-ui-icons location_pin"></i>
+                        ویرایش آدرس
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-12">
+                            <div class="form-ui dt-sl">
+                                <form class="form-account" action="">
+                                    <div class="row">
+                                        <div class="col-md-6 col-sm-12 mb-2">
+                                            <div class="form-row-title">
+                                                <h4>
+                                                    نام و نام خانوادگی
+                                                </h4>
+                                            </div>
+                                            <div class="form-row">
+                                                {{ form_edit.username }}
+                                            </div>
+                                            <a class="text-danger">salam</a>
+                                        </div>
+                                        <div class="col-md-6 col-sm-12 mb-2">
+                                            <div class="form-row-title">
+                                                <h4>
+                                                    شماره موبایل
+                                                </h4>
+                                            </div>
+                                            <div class="form-row">
+                                                <input class="input-ui pl-2 dir-ltr text-left" type="text"
+                                                       placeholder="09xxxxxxxxx">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-sm-12 mb-2">
+                                            <div class="form-row-title">
+                                                <h4>
+                                                    استان
+                                                </h4>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="custom-select-ui">
+                                                    <select class="right">
+                                                        <option value="khrasan-north">
+                                                            خراسان شمالی
+                                                        </option>
+                                                        <option value="tehran">
+                                                            تهران
+                                                        </option>
+                                                        <option value="esfahan">
+                                                            اصفهان
+                                                        </option>
+                                                        <option value="shiraz">
+                                                            شیراز
+                                                        </option>
+                                                        <option value="tabriz">
+                                                            تبریز
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-sm-12 mb-2">
+                                            <div class="form-row-title">
+                                                <h4>
+                                                    شهر
+                                                </h4>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="custom-select-ui">
+                                                    <select class="right">
+                                                        <option value="bojnourd">
+                                                            بجنورد
+                                                        </option>
+                                                        <option value="garme">
+                                                            گرمه
+                                                        </option>
+                                                        <option value="shirvan">
+                                                            شیروان
+                                                        </option>
+                                                        <option value="mane">
+                                                            مانه و سملقان
+                                                        </option>
+                                                        <option value="esfarayen">
+                                                            اسفراین
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 mb-2">
+                                            <div class="form-row-title">
+                                                <h4>
+                                                    آدرس پستی
+                                                </h4>
+                                            </div>
+                                            <div class="form-row">
+                                                    <textarea class="input-ui pr-2 text-right"
+                                                              placeholder=" آدرس تحویل گیرنده را وارد نمایید"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 mb-2">
+                                            <div class="form-row-title">
+                                                <h4>
+                                                    کد پستی
+                                                </h4>
+                                            </div>
+                                            <div class="form-row">
+                                                <input class="input-ui pl-2 dir-ltr text-left placeholder-right"
+                                                       type="text" placeholder=" کد پستی را بدون خط تیره بنویسید">
+                                            </div>
+                                        </div>
+                                        <div class="col-12 pr-4 pl-4">
+                                            <button type="button" class="btn btn-sm btn-primary btn-submit-form">ثبت
+                                                و
+                                                ارسال به این آدرس
+                                            </button>
+                                            <button type="button" class="btn-link-border float-left mt-2">انصراف
+                                                و بازگشت
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        // When the window has finished loading create our google map below
+        google.maps.event.addDomListener(window, 'load', init);
+
+        function init() {
+            // Basic options for a simple Google Map
+            // For more options see: https://developers.google.com/maps/documentation/javascript/reference#MapOptions
+            var mapOptions = {
+                // How zoomed in you want the map to start at (always required)
+                zoom: 11,
+
+                scrollwheel: false,
+
+                // The latitude and longitude to center the map (always required)
+                center: new google.maps.LatLng(23.761226, 90.420766), // New York
+
+                // How you would like to style the map.
+                // This is where you would paste any style found on Snazzy Maps.
+                styles: [{
+                        "featureType": "administrative",
+                        "elementType": "labels.text.fill",
+                        "stylers": [{
+                            "color": "#444444"
+                        }]
+                    },
+                    {
+                        "featureType": "landscape",
+                        "elementType": "all",
+                        "stylers": [{
+                            "color": "#f2f2f2"
+                        }]
+                    },
+                    {
+                        "featureType": "poi",
+                        "elementType": "all",
+                        "stylers": [{
+                            "visibility": "off"
+                        }]
+                    },
+                    {
+                        "featureType": "road",
+                        "elementType": "all",
+                        "stylers": [{
+                                "saturation": -100
+                            },
+                            {
+                                "lightness": 45
+                            }
+                        ]
+                    },
+                    {
+                        "featureType": "road.highway",
+                        "elementType": "all",
+                        "stylers": [{
+                            "visibility": "simplified"
+                        }]
+                    },
+                    {
+                        "featureType": "road.arterial",
+                        "elementType": "labels.icon",
+                        "stylers": [{
+                            "visibility": "off"
+                        }]
+                    },
+                    {
+                        "featureType": "transit",
+                        "elementType": "all",
+                        "stylers": [{
+                            "visibility": "off"
+                        }]
+                    },
+                    {
+                        "featureType": "water",
+                        "elementType": "all",
+                        "stylers": [{
+                                "color": "#314453"
+                            },
+                            {
+                                "visibility": "on"
+                            }
+                        ]
+                    },
+                    {
+                        "featureType": "water",
+                        "elementType": "geometry.fill",
+                        "stylers": [{
+                                "lightness": "-12"
+                            },
+                            {
+                                "saturation": "0"
+                            },
+                            {
+                                "color": "#4bc7e9"
+                            }
+                        ]
+                    }
+                ]
+            };
+
+            // Get the HTML DOM element that will contain your map
+            // We are using a div with id="map" seen below in the <body>
+            var mapNew = document.getElementById('map');
+            var mapEdit = document.getElementById('map-edit');
+
+            // Create the Google Map using our element and options defined above
+            var map = new google.maps.Map(mapNew, mapOptions);
+            var mapEdit = new google.maps.Map(mapEdit, mapOptions);
+
+            // Let's also add a marker while we're at it
+            var marker = new google.maps.Marker({
+                position: new google.maps.LatLng(23.761226, 90.420766),
+                map: map,
+                title: 'Snazzy!'
+            });
+        }
+
+
+    </script>
 </div>
 
 {% endblock %}

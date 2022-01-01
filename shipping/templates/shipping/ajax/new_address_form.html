@@ -1,0 +1,70 @@
+<form class="form-account" action="" id="new_address_form">
+    <div class="row">
+        <div class="col-md-6 col-sm-12 mb-2">
+            <div class="form-row-title">
+                <h4>
+                    نام و نام خانوادگی
+                </h4>
+            </div>
+            <div class="form-row">
+                {{ form.fullname }}
+            </div>
+            <a class="text-danger">{{ form.fullname.errors }}</a>
+        </div>
+        <div class="col-md-6 col-sm-12 mb-2">
+            <div class="form-row-title">
+                <h4>
+                    شماره موبایل
+                </h4>
+            </div>
+            <div class="form-row">
+                {{ form.phone_number }}
+            </div>
+            <a class="text-danger">{{ form.phone_number.errors }}</a>
+        </div>
+        <div class="col-md-6 col-sm-12 mb-2">
+            <div class="form-row-title">
+                <h4>
+                    استان
+                </h4>
+            </div>
+            <div class="form-row">
+                {{ form.province }}
+            </div>
+            <a class="text-danger">{{ form.province.errors }}</a>
+        </div>
+        <div class="col-md-6 col-sm-12 mb-2">
+            <div class="form-row-title">
+                <h4>
+                    شهر
+                </h4>
+            </div>
+            <div class="form-row">
+                {{ form.city }}
+            </div>
+            <a class="text-danger">{{ form.city.errors }}</a>
+        </div>
+        <div class="col-12 mb-2">
+            <div class="form-row-title">
+                <h4>
+                    آدرس پستی
+                </h4>
+            </div>
+            <div class="form-row">
+                {{ form.postal_address }}
+            </div>
+            <a class="text-danger">{{ form.postal_address.errors }}</a>
+        </div>
+        <div class="col-12 mb-2">
+            <div class="form-row-title">
+                <h4>
+                    کد پستی
+                </h4>
+            </div>
+            <div class="form-row">
+                {{ form.postal_code }}
+            </div>
+            <a class="text-danger">{{ form.postal_code.errors }}</a>
+        </div>
+    </div>
+</form>

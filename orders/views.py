@@ -17,6 +17,11 @@ def shopping(request):
     disable_addresses = request.user.addresses.filter(is_active=False, user=request.user)
     if active_address.exists():
         active_address = active_address[0]
+    else:
+        if disable_addresses.exists():
+            active_address = disable_addresses[0]
+            active_address.is_active = True
+            active_address.save()
     return render(
         request, 'orders/shopping.html', {"cart": cart, "address": active_address,
                                           "addresses": disable_addresses, "count": count})
