@@ -17,15 +17,10 @@ from comment.models import Comment
 @user_passes_test(lambda u: not u.is_authenticated, login_url='accounts:logout')
 def user_login(request):
     if request.method == 'POST':
-        form = UserLoginForm(request.POST)
+        form = UserLoginForm(request=request, data=request.POST)
         if form.is_valid():
-            done = form.login(request)
-            if done:
-                return redirect('main:home')
-            else:
-                messages.warning(request, 'اطلاعات وارد شده صحیح نمیباشد. لطفا با دفت بیشتری وارد کنید', 'warning')
-                return redirect('accounts:login')
-
+            form.login()
+            return redirect('main:home')
     else:
         form = UserLoginForm()
     return render(request, 'accounts/login.html', {"form": form})
@@ -39,7 +34,6 @@ def user_register(request):
         if form.is_valid():
             user = form.save(request)
             return redirect('accounts:welcome')
-
     else:
         form = UserRegistrationForm()
     return render(request, 'accounts/register.html', {"form": form})

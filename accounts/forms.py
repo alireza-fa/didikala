@@ -65,15 +65,22 @@ class UserLoginForm(forms.Form):
         error_messages=error_msg,
     )
 
-    def login(self, request):
+    def __init__(self, request=None, *args, **kwargs):
+        super(UserLoginForm, self).__init__(*args, **kwargs)
+        self.request = request
+
+    def clean(self):
         cd = self.cleaned_data
-        user = authenticate(request, username=cd['username'], password=cd['password'])
-        if user is not None:
-            login(request, user)
-            if not cd['remember_me']:
-                request.session.set_expiry(0)
-            return True
-        return False
+        if cd.get('username') and cd.get('password'):
+            user = authenticate(self.request, username=cd.get('username'), password=cd.get('password'))
+            if user is None:
+                raise forms.ValidationError('مشخصات وارد شده صحیح نمیباشد')
+            self.user = user
+
+    def login(self):
+        login(self.request, self.user)
+        if not self.cleaned_data['remember_me']:
+            self.request.session.set_expiry(0)
 
 
 class UserRegistrationForm(forms.Form):
