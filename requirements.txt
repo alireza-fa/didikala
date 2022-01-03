@@ -1,5 +1,6 @@
 asgiref==3.4.1
 Django==3.2
+django-adminlte3==0.1.6
 django-render-partial==0.4
 Pillow==8.4.0
 psycopg2-binary==2.9.2

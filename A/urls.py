@@ -30,12 +30,9 @@ urlpatterns = [
     path('cart/', include('cart.urls')),
     path('shopping/', include('orders.urls')),
     path('', include('main.urls', namespace='main')),
+    url(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
+    url(r'^static/(?P<path>.*)$', django.views.static.serve, {'document_root': settings.STATIC_ROOT, 'show_indexes': settings.DEBUG})
 ]
 if settings.DEBUG:
     urlpatterns += static_local(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     urlpatterns += static_local(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-if not settings.DEBUG:
-    urlpatterns += url(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT})
-    urlpatterns += url(r'^static/(?P<path>.*)$', django.views.static.serve, {'document_root': settings.STATIC_ROOT,
-                                                                             'show_indexes': settings.DEBUG})

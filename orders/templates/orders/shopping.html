@@ -549,9 +549,6 @@
                         <div class="mt-5">
                             <a href="{% url 'cart:cart_detail' %}" class="float-right border-bottom-dt"><i
                                     class="mdi mdi-chevron-double-right"></i>بازگشت به سبد خرید</a>
-                            <a href="{% url 'shopping:order_create' %}" class="float-left border-bottom-dt">تایید و
-                                ادامه ثبت سفارش<i
-                                        class="mdi mdi-chevron-double-left"></i></a>
                         </div>
                     </section>
                 </div>
@@ -587,8 +584,8 @@
                             </div>
                             <a class="mb-2 d-block">
                                 <button class="btn-primary-cm btn-with-icon w-100 text-center pr-0 pl-0" id="next_page"
-                                        data-address="{% if address %}true{% else %}false{% endif %}" data-url="{{ request.path }}"
-                                        data-next="{% url 'shopping:order_create' %}">
+                                        data-address="{% if address %}true{% else %}false{% endif %}" data-url="/shopping/"
+                                        data-next="/shopping/create/">
                                     <i class="mdi mdi-arrow-left"></i>
                                     تایید و ادامه ثبت سفارش
                                 </button>

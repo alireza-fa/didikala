@@ -6,7 +6,7 @@ if($('#next_page').attr('data-address') == 'false'){
 alert('شما آدرسی را ثبت نکرده اید');
 top.location.href=$('#next_page').attr('data-url')
 }else{
-top.location.href=$('next_page').attr('data-next')}
+top.location.href=$('#next_page').attr('data-next')}
 });
 
 $('.change-active-address-button').click(function(){
