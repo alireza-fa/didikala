@@ -4,6 +4,7 @@ from django.views.decorators.http import require_GET
 from suds import Client
 from cart.cart import Cart
 from orders.models import Order, OrderItem
+from shipping.forms import AddAddressForm
 
 
 @login_required
@@ -22,9 +23,12 @@ def shopping(request):
             active_address = disable_addresses[0]
             active_address.is_active = True
             active_address.save()
+            disable_addresses = request.user.addresses.filter(is_active=False, user=request.user)
+
+    form = AddAddressForm()
     return render(
         request, 'orders/shopping.html', {"cart": cart, "address": active_address,
-                                          "addresses": disable_addresses, "count": count})
+                                          "addresses": disable_addresses, "count": count, "form": form})
 
 
 @login_required
@@ -51,7 +55,7 @@ MERCHANT = '70d96859-b496-4e56-a71d-0c4b10ea3d05'
 client = Client('https://www.zarinpal.com/pg/services/WebGate/wsdl')
 description = "پرداخت دیدی کالا"
 mobile = '09123456789'
-CallbackURL = 'http://localhost:8787/shopping/verify/'
+CallbackURL = 'http://localhost:8000/shopping/verify/'
 
 
 @login_required

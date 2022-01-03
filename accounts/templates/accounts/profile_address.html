@@ -5,7 +5,11 @@
 {% block title %}آدرس های من{% endblock %}
 
 {% block js_files %}
-    <script src="{% static 'js/ajax/address.js' %}"></script>
+<script src="{% static 'js/ajax/address.js' %}"></script>
+{% endblock %}
+
+{% block js_files2 %}
+<script src="{% static 'js/ajax/additional.js' %}"></script>
 {% endblock %}
 
 {% block content %}
@@ -132,7 +136,7 @@
                                         </div>
                                     </div>
                                     {% for address in addresses %}
-                                    <div class="col-lg-6 col-md-12">
+                                    <div class="col-lg-6 col-md-12" id="{{ address.id }}">
                                         <div class="card-horizontal-address">
                                             <div class="card-horizontal-address-desc">
                                                 <h4 class="card-horizontal-address-full-name">{{ address.fullname }}</h4>
@@ -152,12 +156,13 @@
                                                     </li>
                                                 </ul>
                                                 <div class="card-horizontal-address-actions">
-                                                    <button class="btn-note" data-toggle="modal"
-                                                            data-target="#modal-location-edit">ویرایش
+                                                    <button class="btn-note additional_button" data-toggle="modal" id="additional_button"
+                                                            data-target="#modal-location-edit"
+                                                            data-id="{{ address.id }}">ویرایش
                                                     </button>
-                                                    <a class="btn-note" href="{% url 'shipping:delete_address' address.id %}"
-                                                                id="remove_location">حذف
-                                                    </a>
+                                                    <button class="btn-note my-delete-button" data-id="{{ address.id }}"
+                                                            id="remove_location">حذف
+                                                    </button>
                                                 </div>
                                             </div>
                                         </div>
@@ -183,7 +188,7 @@
                         <i class="now-ui-icons location_pin"></i>
                         افزودن آدرس جدید
                     </h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -262,11 +267,13 @@
                                     </div>
                                 </form>
                                 <div class="col-12 pr-4 pl-4">
-                                    <button type="button" class="btn btn-sm btn-primary btn-submit-form" id="add_form_submit">ثبت
+                                    <button type="button" class="btn btn-sm btn-primary btn-submit-form"
+                                            id="add_form_submit" data-url="{{ request.path }}">ثبت
                                         و
                                         ارسال به این آدرس
                                     </button>
-                                    <button type="button" class="btn-link-border float-left mt-2" data-dismiss="modal" id="cancel_add">
+                                    <button type="button" class="btn-link-border float-left mt-2" data-dismiss="modal"
+                                            id="cancel_add">
                                         انصراف
                                         و بازگشت
                                     </button>
@@ -297,7 +304,7 @@
                     <div class="row">
                         <div class="col-lg-6 col-md-12">
                             <div class="form-ui dt-sl">
-                                <form class="form-account" action="">
+                                <form class="form-account" action="" id="edit_address_form">
                                     <div class="row">
                                         <div class="col-md-6 col-sm-12 mb-2">
                                             <div class="form-row-title">
@@ -306,9 +313,9 @@
                                                 </h4>
                                             </div>
                                             <div class="form-row">
-                                                {{ form_edit.username }}
+                                                {{ form.username }}
                                             </div>
-                                            <a class="text-danger">salam</a>
+                                            <a class="text-danger">{{ form.username.errors }}</a>
                                         </div>
                                         <div class="col-md-6 col-sm-12 mb-2">
                                             <div class="form-row-title">
@@ -317,9 +324,9 @@
                                                 </h4>
                                             </div>
                                             <div class="form-row">
-                                                <input class="input-ui pl-2 dir-ltr text-left" type="text"
-                                                       placeholder="09xxxxxxxxx">
+                                                {{ form.phone_number }}
                                             </div>
+                                            <a class="text-danger">{{ form.phone_number.errors }}</a>
                                         </div>
                                         <div class="col-md-6 col-sm-12 mb-2">
                                             <div class="form-row-title">
@@ -328,26 +335,9 @@
                                                 </h4>
                                             </div>
                                             <div class="form-row">
-                                                <div class="custom-select-ui">
-                                                    <select class="right">
-                                                        <option value="khrasan-north">
-                                                            خراسان شمالی
-                                                        </option>
-                                                        <option value="tehran">
-                                                            تهران
-                                                        </option>
-                                                        <option value="esfahan">
-                                                            اصفهان
-                                                        </option>
-                                                        <option value="shiraz">
-                                                            شیراز
-                                                        </option>
-                                                        <option value="tabriz">
-                                                            تبریز
-                                                        </option>
-                                                    </select>
-                                                </div>
+                                                {{ form.province }}
                                             </div>
+                                            <a class="text-danger">{{ form.province.errors }}</a>
                                         </div>
                                         <div class="col-md-6 col-sm-12 mb-2">
                                             <div class="form-row-title">
@@ -356,26 +346,9 @@
                                                 </h4>
                                             </div>
                                             <div class="form-row">
-                                                <div class="custom-select-ui">
-                                                    <select class="right">
-                                                        <option value="bojnourd">
-                                                            بجنورد
-                                                        </option>
-                                                        <option value="garme">
-                                                            گرمه
-                                                        </option>
-                                                        <option value="shirvan">
-                                                            شیروان
-                                                        </option>
-                                                        <option value="mane">
-                                                            مانه و سملقان
-                                                        </option>
-                                                        <option value="esfarayen">
-                                                            اسفراین
-                                                        </option>
-                                                    </select>
-                                                </div>
+                                                {{ form.city }}
                                             </div>
+                                            <a class="text-danger">{{ form.city.errors }}</a>
                                         </div>
                                         <div class="col-12 mb-2">
                                             <div class="form-row-title">
@@ -384,9 +357,9 @@
                                                 </h4>
                                             </div>
                                             <div class="form-row">
-                                                    <textarea class="input-ui pr-2 text-right"
-                                                              placeholder=" آدرس تحویل گیرنده را وارد نمایید"></textarea>
+                                                {{ form.postal_address }}
                                             </div>
+                                            <a class="text-danger">{{ form.postal_address.errors }}</a>
                                         </div>
                                         <div class="col-12 mb-2">
                                             <div class="form-row-title">
@@ -395,21 +368,21 @@
                                                 </h4>
                                             </div>
                                             <div class="form-row">
-                                                <input class="input-ui pl-2 dir-ltr text-left placeholder-right"
-                                                       type="text" placeholder=" کد پستی را بدون خط تیره بنویسید">
+                                                {{ form.postal_code }}
                                             </div>
-                                        </div>
-                                        <div class="col-12 pr-4 pl-4">
-                                            <button type="button" class="btn btn-sm btn-primary btn-submit-form">ثبت
-                                                و
-                                                ارسال به این آدرس
-                                            </button>
-                                            <button type="button" class="btn-link-border float-left mt-2">انصراف
-                                                و بازگشت
-                                            </button>
+                                            <a class="text-danger">{{ form.postal_code.errors }}</a>
                                         </div>
                                     </div>
                                 </form>
+                                <div class="col-12 pr-4 pl-4">
+                                    <button type="button" class="btn btn-sm btn-primary btn-submit-form" id="edit_form_button" data-url="{{ request.path }}">ثبت
+                                        و
+                                        ارسال به این آدرس
+                                    </button>
+                                    <button type="button" class="btn-link-border float-left mt-2" data-dismiss="modal">انصراف
+                                        و بازگشت
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -532,6 +505,7 @@
                 title: 'Snazzy!'
             });
         }
+
 
 
     </script>
