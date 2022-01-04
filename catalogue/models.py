@@ -12,9 +12,13 @@ class ActiveManager(models.Manager):
 
 
 class ProductType(models.Model):
-    title = models.CharField(max_length=120)
-    english_title = models.CharField(max_length=120)
-    slug = models.SlugField(max_length=120, allow_unicode=True)
+    title = models.CharField(max_length=120, verbose_name='عنوان')
+    english_title = models.CharField(max_length=120, verbose_name='عنوان به انگلیسی')
+    slug = models.SlugField(max_length=120, allow_unicode=True, verbose_name='اسلاگ')
+
+    class Meta:
+        verbose_name = 'نوع محصول'
+        verbose_name_plural = 'انواع محصولات'
 
     def __str__(self):
         return self.title
@@ -24,16 +28,16 @@ class ProductType(models.Model):
 
 
 class Category(models.Model):
-    product_type = models.ForeignKey(ProductType, on_delete=models.CASCADE, related_name='categories')
-    name = models.CharField(max_length=64)
-    english_name = models.CharField(max_length=64)
-    slug = models.SlugField(max_length=64, allow_unicode=True)
-    parent = models.ForeignKey('self', on_delete=models.CASCADE, related_name='children', null=True, blank=True)
-    is_child = models.BooleanField(default=False)
+    product_type = models.ForeignKey(ProductType, on_delete=models.CASCADE, related_name='categories', verbose_name='نوع محصول')
+    name = models.CharField(max_length=64, verbose_name='اسم')
+    english_name = models.CharField(max_length=64, verbose_name='اسم به انگیسی')
+    slug = models.SlugField(max_length=64, allow_unicode=True, verbose_name='اسلاگ')
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, related_name='children', null=True, blank=True, verbose_name='دسته بندی والد')
+    is_child = models.BooleanField(default=False, verbose_name='زیر مجموعه است/ نیست')
 
     class Meta:
-        verbose_name = 'category'
-        verbose_name_plural = 'categories'
+        verbose_name = 'دسته بندی'
+        verbose_name_plural = 'دسته بندی ها'
 
     def __str__(self):
         return self.name
@@ -43,12 +47,16 @@ class Category(models.Model):
 
 
 class Brand(models.Model):
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='brands')
-    name = models.CharField(max_length=64)
-    english_name = models.CharField(max_length=64)
-    slug = models.SlugField(max_length=64, allow_unicode=True)
-    parent = models.ForeignKey('self', on_delete=models.CASCADE, related_name='children', null=True, blank=True)
-    is_child = models.BooleanField(default=False)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='brands', verbose_name='دسته بندی')
+    name = models.CharField(max_length=64, verbose_name='اسم')
+    english_name = models.CharField(max_length=64, verbose_name='اسم به انگلیسی')
+    slug = models.SlugField(max_length=64, allow_unicode=True, verbose_name='اسلاگ')
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, related_name='children', null=True, blank=True, verbose_name='برند والد')
+    is_child = models.BooleanField(default=False, verbose_name='زیر مجموعه است/ نیست')
+
+    class Meta:
+        verbose_name = 'برند'
+        verbose_name_plural = 'برند ها'
 
     def __str__(self):
         return self.name
@@ -58,26 +66,28 @@ class Brand(models.Model):
 
 
 class Product(models.Model):
-    title = models.CharField(max_length=120)
-    english_title = models.CharField(max_length=120)
-    slug = models.SlugField(max_length=120, allow_unicode=True)
-    product_type = models.ForeignKey(ProductType, on_delete=models.CASCADE, related_name='products')
-    upc = models.BigIntegerField()
-    category = models.ManyToManyField(Category, related_name='products')
-    brand = models.ManyToManyField(Brand, related_name='products', blank=True)
-    description = models.TextField(null=True, blank=True)
-    discount = models.PositiveIntegerField(null=True, blank=True)
-    special_sale = models.BooleanField(default=False)
-    created = models.DateTimeField(auto_now_add=True)
-    modified = models.DateTimeField(auto_now=True)
-    is_active = models.BooleanField(default=True)
-    exist = models.BooleanField(default=True)
+    title = models.CharField(max_length=120, verbose_name='عنوان')
+    english_title = models.CharField(max_length=120, verbose_name='عنوان انگلیسی')
+    slug = models.SlugField(max_length=120, allow_unicode=True, verbose_name='اسلاگ')
+    product_type = models.ForeignKey(ProductType, on_delete=models.CASCADE, related_name='products', verbose_name='نوع محصول')
+    upc = models.BigIntegerField(verbose_name='شماره اختصاصی')
+    category = models.ManyToManyField(Category, related_name='products', verbose_name='دسته بندی')
+    brand = models.ManyToManyField(Brand, related_name='products', blank=True, verbose_name='برند')
+    description = models.TextField(null=True, blank=True, verbose_name='توضیحات')
+    discount = models.PositiveIntegerField(null=True, blank=True, verbose_name='تخفیف')
+    special_sale = models.BooleanField(default=False, verbose_name='فروش ویژه')
+    created = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ')
+    modified = models.DateTimeField(auto_now=True, verbose_name='تاریخ اخرین تغییرات')
+    is_active = models.BooleanField(default=True, verbose_name='فعال/غیر فعال')
+    exist = models.BooleanField(default=True, verbose_name='وجود دارد/ندارد')
+
+    class Meta:
+        verbose_name = 'محصول'
+        verbose_name_plural = 'محصولات'
+        ordering = ('-created', )
 
     default_manager = models.Manager()
     objects = ActiveManager()
-
-    class Meta:
-        ordering = ('-created', )
 
     def __str__(self):
         return self.title
@@ -240,17 +250,25 @@ class Product(models.Model):
 
 
 class Attribute(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='attributes')
-    title = models.CharField(max_length=120)
-    value = models.CharField(max_length=240)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='attributes', verbose_name='محصول')
+    title = models.CharField(max_length=120, verbose_name='عنوان')
+    value = models.CharField(max_length=240, verbose_name='مقدار')
+
+    class Meta:
+        verbose_name = 'جزئیات'
+        verbose_name_plural = 'جزیبات محصولات'
 
     def __str__(self):
         return self.title
 
 
 class ProductImage(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images')
-    image = models.ImageField(upload_to='products/%Y/%m/%d/')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images', verbose_name='محصول')
+    image = models.ImageField(upload_to='products/%Y/%m/%d/', verbose_name='تصویر')
+
+    class Meta:
+        verbose_name = 'تصویر محصول'
+        verbose_name_plural = 'تصاویر محصولات'
 
     def __str__(self):
         return f"{self.product} - {self.id}"
@@ -275,16 +293,24 @@ class ProductColor(models.Model):
         (YELLOW, 'زرد')
     )
 
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='colors')
-    color = models.CharField(choices=COLOR_CHOICES, max_length=32)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='colors', verbose_name='محصول')
+    color = models.CharField(choices=COLOR_CHOICES, max_length=32, verbose_name='رنگ')
+
+    class Meta:
+        verbose_name = 'رنگ'
+        verbose_name_plural = 'رنگ محصولات'
 
     def __str__(self):
         return f'{self.get_color_display()}'
 
 
 class View(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='views')
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='views')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='views', verbose_name='محصول')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='views', verbose_name='کاربر')
+
+    class Meta:
+        verbose_name = 'بازدید'
+        verbose_name_plural = 'بازدید ها'
 
     def __str__(self):
         return f"{self.product} - {self.user}"
@@ -308,8 +334,12 @@ def get_user_sale():
 
 
 class ProductSale(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='sales')
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET(get_user_sale), related_name='sales')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='sales', verbose_name='محصول')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET(get_user_sale), related_name='sales', verbose_name='کاربر')
+
+    class Meta:
+        verbose_name = 'فروش محصول'
+        verbose_name_plural = 'فروش محصولات'
 
 
 class ProductSize(models.Model):
@@ -327,8 +357,12 @@ class ProductSize(models.Model):
         (XXL, "XXL"),
         (L_XL, "L-XL")
     )
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='sizes')
-    value = models.PositiveSmallIntegerField(choices=PRODUCT_SIZE_CHOICES, default=L)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='sizes', verbose_name='محصول')
+    value = models.PositiveSmallIntegerField(choices=PRODUCT_SIZE_CHOICES, default=L, verbose_name='مقدار')
+
+    class Meta:
+        verbose_name = 'سایز محصول'
+        verbose_name_plural = 'سایز محصولات'
 
     def __str__(self):
         return f"{self.product} - {self.value}"
@@ -342,11 +376,13 @@ def get_user_view():
 
 
 class ProductFavorite(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='favorites')
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='favorites')
-    created = models.DateTimeField(auto_now_add=True)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='favorites', verbose_name='محصول')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='favorites', verbose_name='کاربر')
+    created = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ')
 
     class Meta:
+        verbose_name = 'علاقه مندی'
+        verbose_name_plural = 'علاقه مندی ها'
         ordering = ('-created', )
 
     def __str__(self):

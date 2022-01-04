@@ -17,25 +17,29 @@ def upload_image_to(instance, filename):
 
 
 class User(AbstractBaseUser):
-    username = models.CharField(max_length=32, unique=True, null=True, blank=True)
-    email = models.EmailField(max_length=100, null=True, blank=True, unique=True)
-    first_name = models.CharField(max_length=32, null=True, blank=True)
-    last_name = models.CharField(max_length=32, null=True, blank=True)
-    fullname = models.CharField(max_length=64, null=True, blank=True)
-    code_melli = models.CharField(max_length=20, null=True, blank=True)
-    card_number = models.CharField(max_length=20, null=True, blank=True)
-    received_news = models.BooleanField(default=False)
-    phone_number = models.BigIntegerField(null=True, blank=True, unique=True)
-    image = models.ImageField(upload_to='profiles/%Y/%m/%d/', null=True, blank=True)
-    age = models.PositiveSmallIntegerField(null=True, blank=True)
-    city = models.CharField(max_length=32, null=True, blank=True)
-    foreign_person = models.BooleanField(default=False)
+    username = models.CharField(max_length=32, unique=True, null=True, blank=True, verbose_name='نام کاربری')
+    email = models.EmailField(max_length=100, null=True, blank=True, unique=True, verbose_name='ایمیل')
+    first_name = models.CharField(max_length=32, null=True, blank=True, verbose_name='نام')
+    last_name = models.CharField(max_length=32, null=True, blank=True, verbose_name='نام خانوادگی')
+    fullname = models.CharField(max_length=64, null=True, blank=True, verbose_name='نام و نام خانوادگی')
+    code_melli = models.CharField(max_length=20, null=True, blank=True, verbose_name='کد ملی')
+    card_number = models.CharField(max_length=20, null=True, blank=True, verbose_name='شماره حساب')
+    received_news = models.BooleanField(default=False, verbose_name='عضویت در خبرنامه')
+    phone_number = models.BigIntegerField(null=True, blank=True, unique=True, verbose_name='شماره موبایل')
+    image = models.ImageField(upload_to='profiles/%Y/%m/%d/', null=True, blank=True, verbose_name='تصویر')
+    age = models.PositiveSmallIntegerField(null=True, blank=True, verbose_name='سن')
+    city = models.CharField(max_length=32, null=True, blank=True, verbose_name='شهر')
+    foreign_person = models.BooleanField(default=False, verbose_name='تبعه خارجی')
 
     USERNAME_FIELD = 'username'
-    is_active = models.BooleanField(default=True)
-    is_admin = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True, verbose_name='کاربر فعال/غیر فعال')
+    is_admin = models.BooleanField(default=False, verbose_name='مدیر')
     REQUIRED_FIELDS = ('email', )
     objects = UserManager()
+
+    class Meta:
+        verbose_name = 'کاربر'
+        verbose_name_plural = 'کاربران'
 
     def __str__(self):
         return str(self.id)
@@ -58,8 +62,8 @@ class User(AbstractBaseUser):
 
 
 class Score(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='scores')
-    score = models.IntegerField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='scores', verbose_name='کاربر')
+    score = models.IntegerField(verbose_name='امتیاز')
 
     def __str__(self):
         return f"{self.user} - {self.score}"
@@ -69,10 +73,10 @@ class Score(models.Model):
 
 
 class UserMassage(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='massages')
-    subject = models.CharField(max_length=120)
-    body = models.TextField()
-    created = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='massages', verbose_name='کاربر')
+    subject = models.CharField(max_length=120, verbose_name='موضوع')
+    body = models.TextField(verbose_name='متن')
+    created = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ پیام')
 
     class Meta:
         ordering = ('-created', )

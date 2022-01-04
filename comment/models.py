@@ -27,24 +27,26 @@ class Comment(models.Model):
         (GOOD, 'خوب'),
         (VERY_GOOD, 'خیلی خوب')
     )
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments')
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='comments')
-    subject = models.CharField(max_length=120)
-    positive_point = models.CharField(max_length=500, null=True, blank=True)
-    negative_point = models.CharField(max_length=500, null=True, blank=True)
-    body = models.TextField()
-    suggest = models.PositiveSmallIntegerField(choices=SUGGEST_CHOICES, default=NO_IDEA)
-    quality = models.PositiveSmallIntegerField(choices=COMMENT_CHOICES, default=NORMAL)
-    cost = models.PositiveSmallIntegerField(choices=COMMENT_CHOICES, default=NORMAL)
-    innovation = models.PositiveSmallIntegerField(choices=COMMENT_CHOICES, default=NORMAL)
-    features = models.PositiveSmallIntegerField(choices=COMMENT_CHOICES, default=NORMAL)
-    easiness = models.PositiveSmallIntegerField(choices=COMMENT_CHOICES, default=NORMAL)
-    designing = models.PositiveSmallIntegerField(choices=COMMENT_CHOICES, default=NORMAL)
-    created = models.DateTimeField(auto_now_add=True)
-    modified = models.DateTimeField(auto_now=True)
-    is_active = models.BooleanField(default=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments', verbose_name='کاربر')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='comments', verbose_name='محصول')
+    subject = models.CharField(max_length=120, verbose_name='موضوع')
+    positive_point = models.CharField(max_length=500, null=True, blank=True, verbose_name='نقاط قوت')
+    negative_point = models.CharField(max_length=500, null=True, blank=True, verbose_name='نقاط ضعف')
+    body = models.TextField(verbose_name='متن')
+    suggest = models.PositiveSmallIntegerField(choices=SUGGEST_CHOICES, default=NO_IDEA, verbose_name='موضوع')
+    quality = models.PositiveSmallIntegerField(choices=COMMENT_CHOICES, default=NORMAL, verbose_name='کیفیت')
+    cost = models.PositiveSmallIntegerField(choices=COMMENT_CHOICES, default=NORMAL, verbose_name='قسمت')
+    innovation = models.PositiveSmallIntegerField(choices=COMMENT_CHOICES, default=NORMAL, verbose_name='نو آوری')
+    features = models.PositiveSmallIntegerField(choices=COMMENT_CHOICES, default=NORMAL, verbose_name='امکانات')
+    easiness = models.PositiveSmallIntegerField(choices=COMMENT_CHOICES, default=NORMAL, verbose_name='سهولت در استفاده')
+    designing = models.PositiveSmallIntegerField(choices=COMMENT_CHOICES, default=NORMAL, verbose_name='طراحی')
+    created = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ ثبت نظر')
+    modified = models.DateTimeField(auto_now=True, verbose_name='تاریخ تغییر نظر')
+    is_active = models.BooleanField(default=False, verbose_name='فغال/غیر فعال')
 
     class Meta:
+        verbose_name = 'نظر'
+        verbose_name_plural = 'نظرات'
         ordering = ('modified', )
 
     def __str__(self):
@@ -58,14 +60,19 @@ class Comment(models.Model):
 
 
 class ProductQuestion(models.Model):
-    name = models.CharField(max_length=64, default='ناشناس')
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='questions')
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='questions')
-    question = models.TextField()
-    notify = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=False)
-    is_child = models.BooleanField(default=False)
-    created = models.DateTimeField(auto_now_add=True)
+    name = models.CharField(max_length=64, default='ناشناس', verbose_name='اسم')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='questions', verbose_name='کاربر')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='questions', verbose_name='محصول')
+    question = models.TextField(verbose_name='سوال')
+    notify = models.BooleanField(default=False, verbose_name='اعلن بازخورد/اعلان ندارد')
+    is_active = models.BooleanField(default=False, verbose_name='فعال/ غیر فعال')
+    is_child = models.BooleanField(default=False, verbose_name='بازخور')
+    created = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ')
+
+    class Meta:
+        verbose_name = 'سوال'
+        verbose_name_plural = 'سوالات'
+        ordering = ('-created', )
 
     def __str__(self):
         return self.name
