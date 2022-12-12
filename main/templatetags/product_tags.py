@@ -45,3 +45,8 @@ def times(number):
 @register.simple_tag
 def get_products():
     return Product.objects.all()
+
+
+@register.simple_tag
+def filter_tag():
+    return Product.objects.all()

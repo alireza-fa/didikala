@@ -55,7 +55,7 @@ MERCHANT = '70d96859-b496-4e56-a71d-0c4b10ea3d05'
 client = Client('https://www.zarinpal.com/pg/services/WebGate/wsdl')
 description = "پرداخت دیدی کالا"
 mobile = '09123456789'
-CallbackURL = 'http://localhost:8000/shopping/verify/'
+CallbackURL = 'http://localhost:8002/shopping/verify/'
 
 
 @login_required
@@ -83,7 +83,7 @@ def verify(request):
         if result.Status == 100:
             order_global.paid = True
             order_global.save()
-            return redirect('shop:home')
+            return render(request, 'orders/success_pay.html', {"order": order_global})
         elif result.Status == 101:
             return render(request, 'orders/success_pay.html', {"order": order_global})
         else:

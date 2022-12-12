@@ -47,6 +47,7 @@ class Category(models.Model):
 
 
 class Brand(models.Model):
+    product_type = models.ForeignKey(ProductType, on_delete=models.CASCADE, related_name='brands', null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='brands', verbose_name='دسته بندی')
     name = models.CharField(max_length=64, verbose_name='اسم')
     english_name = models.CharField(max_length=64, verbose_name='اسم به انگلیسی')
@@ -247,6 +248,21 @@ class Product(models.Model):
         return cls.objects.all().annotate(
             view=Count('views__id')
         ).order_by('-view')
+
+    @staticmethod
+    def filters(product_type):
+        categories = product_type.categories.all()
+        brands = product_type.brands.all()
+        colors = ProductColor.objects.filter(product__product_type=product_type)
+        data_filter = {"categories": None, "brands": None, "colors": None, "partners": None}
+        if categories.exists():
+            data_filter['categories'] = categories
+        if brands.exists():
+            data_filter['brands'] = brands
+        if colors.exists():
+            data_filter['colors'] = colors
+
+        return data_filter
 
 
 class Attribute(models.Model):
